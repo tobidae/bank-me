@@ -1,0 +1,29 @@
+{
+  "name": "bank-me",
+  "version": "1.0.0",
+  "description": "A script that exports your bank statement to Google Sheets for easy parsing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "plaid",
+    "bank",
+    "pnc",
+    "statement",
+    "google",
+    "sheets"
+  ],
+  "author": "Tobi Akerele",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "body-parser": "^1.18.3",
+    "dotenv": "^5.0.1",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "google-spreadsheet": "^2.0.4",
+    "moment": "^2.22.2",
+    "plaid": "^2.6.1"
+  }
+}
