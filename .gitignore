@@ -51,4 +51,4 @@ package-lock.json
 
 # dotenv environment variables file
 .env
-/src/environments/environment.*.ts
+/src/environments/environment.*
