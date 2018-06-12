@@ -9,6 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "run": "ng build && node app.js",
     "postinstall": "ng build --aot -prod"
   },
   "private": true,
@@ -24,8 +25,11 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "angularfire2": "^5.0.0-rc.10",
+    "body-parser": "^1.18.3",
     "core-js": "^2.5.4",
     "express": "^4.16.3",
+    "firebase": "^5.0.4",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

@@ -3,14 +3,14 @@
 require('dotenv').config();
 
 var express = require('express');
-var bodyParser = require('body-parser');
+var router = express.Router();
+
 var bank = require('./src/bank');
 var sheet = require('./src/sheet');
 var moment = require('moment');
-const asyncUtility = require('async');
+var asyncUtility = require('async');
 
 var APP_PORT = 8000;
-var app = express();
 
 function dateRange(startDate, endDate) {
   var result = [];
@@ -24,26 +24,19 @@ function dateRange(startDate, endDate) {
   return result;
 }
 
-app.use(express.static('public'));
-app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-app.use(bodyParser.json());
-
-app.get('/', function (request, response, next) {
+router.get('/', (request, response) => {
   bank.init(request, response);
 });
 
-app.post('/get_access_token', function (request, response) {
+router.post('/get_access_token', (request, response) => {
   bank.getAccessToken(request, response);
 });
 
-app.get('/accounts', function (request, response) {
+router.get('/accounts', (request, response) => {
   bank.getAccounts(request, response);
 });
 
-app.post('/transactions', function (request, response) {
+router.post('/transactions', (request, response) => {
   var startDate = moment(moment().subtract(23, 'months').format('YYYY-MM-DD'));
   var endDate = moment(moment().format('YYYY-MM-DD'));
   var range = dateRange(startDate, endDate);
@@ -69,6 +62,8 @@ app.post('/transactions', function (request, response) {
   });
 });
 
-var server = app.listen(APP_PORT, function () {
-  console.log('server listening on port ' + APP_PORT);
-});
+module.exports = router;
+
+// var server = app.listen(APP_PORT, function () {
+//   console.log('server listening on port ' + APP_PORT);
+// });

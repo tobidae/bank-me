@@ -26,10 +26,11 @@ const client = new plaid.Client(
 
 module.exports = {
   init: (request, response) => {
-    response.render('index.ejs', {
-      PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-      PLAID_ENV: PLAID_ENV,
-    });
+    response.send("API is live");
+    // response.render('index.ejs', {
+    //   PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+    //   PLAID_ENV: PLAID_ENV,
+    // });
   },
   getAccessToken: (request, response) => {
     PUBLIC_TOKEN = request.body.public_token;
