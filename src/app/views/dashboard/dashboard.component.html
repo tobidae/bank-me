@@ -1,0 +1,7 @@
+<app-navbar></app-navbar>
+<div class="container">
+
+  <app-getting-started *ngIf="!hasDoneTutorial" (isDoneWithTutorial)="saveHelpState($event)"></app-getting-started>
+
+</div>
+<!-- /container -->

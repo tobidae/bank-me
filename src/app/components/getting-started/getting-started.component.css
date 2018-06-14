@@ -1,0 +1,52 @@
+.jumbotron {
+  padding-top: 2rem;
+}
+
+ol li:before {
+  position: absolute;
+  left: 0px;
+  padding-top: 3px;
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  color: rgb(255, 255, 255);
+  width: 25px;
+  height: 25px;
+  content: "✓";
+  margin: 5px 20px;
+  transition: all 0.2s;
+  background: rgb(20, 157, 204);
+  border-radius: 50%;
+}
+
+h1 {
+  padding-bottom: 20px;
+}
+
+h1 button {
+  float: right;
+}
+
+li {
+  line-height: 1.7em;
+  list-style: none;
+  padding-bottom: 20px;
+}
+
+li strong {
+  color: #767676;
+}
+
+.normal-img {
+  width: 40%;
+}
+
+.small-img {
+  width: 70%;
+}
+
+li em {
+  color: #545454;
+  font-weight: 100;
+  background: #ADD8E6;
+}
