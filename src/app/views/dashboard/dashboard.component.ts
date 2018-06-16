@@ -19,22 +19,33 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getSheetID()
+      .then((value: string) => {
+        console.log(value);
+        this.sheetID = value;
+      });
   }
 
   saveSheetID() {
     if (this.sheetID) {
       this.sheetIDError = '';
       this.storageService.saveInCloud('sheetID', this.sheetID)
-        .then(res => {
-          console.log("Response", res);
+        .then(() => {
           this.sheetIDSuccess = 'Added sheet ID to server';
+          this.sheetIDError = '';
         })
         .catch(error => {
           this.sheetIDError = error;
+          this.sheetIDSuccess = '';
         });
     } else {
       this.sheetIDError = 'Please enter a sheet ID';
+      this.sheetIDSuccess = '';
     }
+  }
+
+  getSheetID() {
+    return this.storageService.getInCloud('sheetID');
   }
 
   saveHelpState(value) {

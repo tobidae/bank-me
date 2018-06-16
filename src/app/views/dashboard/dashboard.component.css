@@ -19,3 +19,8 @@
 .success {
   color: green;
 }
+
+.error, .success {
+  margin-top: 15px;
+  font-weight: bold;
+}

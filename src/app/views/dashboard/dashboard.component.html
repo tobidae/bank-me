@@ -12,6 +12,7 @@
               <label>Your Google Sheet ID</label>
               <input type="text" required [(ngModel)]="sheetID" class="form-control">
               <label class="error" *ngIf="sheetIDError">{{sheetIDError}}</label>
+              <label class="success" *ngIf="sheetIDSuccess">{{sheetIDSuccess}}</label>
             </div>
             <button class="btn btn-primary" (click)="saveSheetID()">Save Sheet ID</button>
           </div>

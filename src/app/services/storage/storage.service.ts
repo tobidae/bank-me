@@ -20,6 +20,20 @@ export class StorageService {
     return Promise.reject("No user ID");
   }
 
+  getInCloud(key) {
+    const userID = this.getInLocal('userID');
+    return new Promise(resolve => {
+      if (userID) {
+        this.db.object(`settings/${userID}`).valueChanges()
+          .subscribe(object => {
+            resolve(object[key]);
+          });
+      } else {
+        resolve(null);
+      }
+    });
+  }
+
   setInLocal(key, val): void {
     console.log('recieved = key:' + key + 'value:' + val);
     this.storage.set(key, val);
