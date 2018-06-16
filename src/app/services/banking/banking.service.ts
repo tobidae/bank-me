@@ -9,7 +9,7 @@ declare var Plaid: any;
 })
 export class BankingService {
 
-  constructor(public http: HttpClient, public storage: StorageService) { }
+  constructor(public http: HttpClient, public storageService: StorageService) { }
 
   launchPlaidService() {
     const token = this.checkPlaidToken();
@@ -36,19 +36,19 @@ export class BankingService {
         // TODO: Handle error
       }
       console.log(data);
-      return data['token'];
+      return this.setPlaidToken(data);
     });
   }
 
   checkPlaidToken() {
-    const token = this.storage.getInLocal('plaid_access_token');
-    const itemID = this.storage.getInLocal('plaid_item_id');
+    const token = this.storageService.getInLocal('plaid_access_token');
+    const itemID = this.storageService.getInLocal('plaid_item_id');
 
     return token && itemID;
   }
 
-  setPlaidToken(token, itemID) {
-    this.storage.setInLocal('plaid_item_id', itemID);
-    return this.storage.setInLocal('plaid_access_token', token);
+  setPlaidToken(data) {
+    this.storageService.setInLocal('plaid_item_id', data.itemID);
+    return this.storageService.setInLocal('plaid_access_token', data.token);
   }
 }

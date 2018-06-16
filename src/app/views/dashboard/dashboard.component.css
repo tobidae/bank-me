@@ -1,0 +1,21 @@
+.card {
+  width: 50rem;
+  margin-top: 20px;
+}
+
+.header {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.row {
+  margin-top: 10px;
+}
+
+.error{
+  color: red;
+}
+
+.success {
+  color: green;
+}

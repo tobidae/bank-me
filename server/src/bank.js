@@ -14,7 +14,6 @@ const PLAID_ENV = process.env.PLAID_ENV || 'development';
 // persistent data store
 var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
-var ITEM_ID = null;
 
 // Initialize the Plaid client
 const client = new plaid.Client(
@@ -27,10 +26,6 @@ const client = new plaid.Client(
 module.exports = {
   init: (request, response) => {
     response.send("API is live");
-    // response.render('index.ejs', {
-    //   PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    //   PLAID_ENV: PLAID_ENV,
-    // });
   },
   getAccessToken: (request, response) => {
     PUBLIC_TOKEN = request.body.public_token;

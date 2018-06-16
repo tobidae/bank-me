@@ -8,7 +8,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   @Input() hasBankTransactions = false;
-  constructor(public authService: AuthService) { }
+  displayName: string;
+
+  constructor(public authService: AuthService) {
+    this.displayName = this.authService.displayName;
+  }
 
   ngOnInit() {
   }

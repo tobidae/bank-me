@@ -48,13 +48,16 @@ export class AuthService {
     });
   }
 
-
   isLoggedIn() {
     if (this.userDetails == null) {
       return false;
     } else {
       return true;
     }
+  }
+
+  get displayName() {
+    return this.userDetails.displayName || this.userDetails.email;
   }
 
   logout() {

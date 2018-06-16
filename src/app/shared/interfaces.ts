@@ -15,5 +15,8 @@ export interface BankTransaction {
   account_id: string;
   transaction_id: string;
   pending: boolean;
+}
 
+export enum PlaidErrors {
+  PRODUCT_NOT_READY = 'PRODUCT_NOT_READY'
 }

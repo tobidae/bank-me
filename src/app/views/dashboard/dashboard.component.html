@@ -2,6 +2,32 @@
 <div class="container">
   <app-getting-started *ngIf="!hasDoneTutorial" (isDoneWithTutorial)="saveHelpState($event)"></app-getting-started>
 
+  <div class="data-center" *ngIf="hasDoneTutorial && !hasPlaidAccess">
+    <div class="card mx-auto">
+      <div class="card-body">
+        <h3 class="card-title header">You need to do a couple of things to get started</h3>
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-md-offset-2">
+            <div class="form-group">
+              <label>Your Google Sheet ID</label>
+              <input type="text" required [(ngModel)]="sheetID" class="form-control">
+              <label class="error" *ngIf="sheetIDError">{{sheetIDError}}</label>
+            </div>
+            <button class="btn btn-primary" (click)="saveSheetID()">Save Sheet ID</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mx-auto">
+      <div class="card-body">
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-md-offset-3">
+            <button class="btn btn-success btn-block">Link Bank Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 <!-- /container -->
