@@ -9,13 +9,14 @@ import * as constants from '../../shared/constants';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  constructor(public authService: AuthService, public storageService: StorageService) { }
+  constructor(public authService: AuthService, public storageService: StorageService) {
+  }
 
   ngOnInit() {
   }
 
   saveHelpState(value) {
-    this.storageService.saveInLocal(constants.HAS_DONE_TUTORIAL, value);
+    this.storageService.setInLocal(constants.HAS_DONE_TUTORIAL, value);
   }
 
   get hasDoneTutorial() {

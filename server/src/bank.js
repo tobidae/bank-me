@@ -12,9 +12,9 @@ const PLAID_ENV = process.env.PLAID_ENV || 'development';
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
-var ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
-var ITEM_ID = process.env.ITEM_ID;
+var ITEM_ID = null;
 
 // Initialize the Plaid client
 const client = new plaid.Client(
@@ -42,11 +42,9 @@ module.exports = {
           error: msg
         });
       }
-      ACCESS_TOKEN = tokenResponse.access_token;
-      ITEM_ID = tokenResponse.item_id;
-      
-      response.json({
-        'error': false
+      return response.json({
+        access_token: tokenResponse.access_token,
+        item_id: tokenResponse.item_id
       });
     });
   },

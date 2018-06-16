@@ -1,7 +1,15 @@
+.card {
+  width: 40rem;
+}
+
 .header {
   text-align: center;
-  font-size: 30px;
-  margin: 40px 0;
+  font-size: 36px;
+  margin: 30px 0;
+}
+
+.or-text{
+  text-align: center;
 }
 
 .row {

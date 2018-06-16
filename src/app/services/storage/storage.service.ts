@@ -8,7 +8,7 @@ export class StorageService {
 
   constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService) {}
 
-  saveInLocal(key, val): void {
+  setInLocal(key, val): void {
     console.log('recieved = key:' + key + 'value:' + val);
     this.storage.set(key, val);
   }

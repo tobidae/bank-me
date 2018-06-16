@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
@@ -17,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private ngZone: NgZone
   ) {
     this.createForm();
   }
@@ -32,7 +33,9 @@ export class LoginComponent implements OnInit {
   signInWithGoogle() {
     this.authService.signInWithGoogle()
       .then((res) => {
-        this.router.navigate(['dashboard']);
+        this.ngZone.run(() => {
+          this.router.navigate(['dashboard']);
+        });
       })
       .catch((err) => console.log(err));
   }
@@ -40,7 +43,9 @@ export class LoginComponent implements OnInit {
   signInWithPassword(value) {
     this.authService.signInWithPassword(value)
       .then(res => {
-        this.router.navigate(['dashboard']);
+        this.ngZone.run(() => {
+          this.router.navigate(['dashboard']);
+        });
       }, err => {
         console.log(err);
         this.errorMessage = err.message;
