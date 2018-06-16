@@ -1,6 +1,6 @@
+import { Http } from '@angular/http';
 import { environment } from './../../../environments/environment.prod';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, NgZone } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
 declare var Plaid: any;
 
@@ -9,12 +9,13 @@ declare var Plaid: any;
 })
 export class BankingService {
 
-  constructor(public http: HttpClient, public storageService: StorageService) { }
+  constructor(public http: Http, public storageService: StorageService, public ngZone: NgZone) { }
 
   launchPlaidService() {
-    const token = this.checkPlaidToken();
-    if (token) {
-      return token;
+    const checkForToken = this.checkPlaidToken();
+    const self = this;
+    if (checkForToken) {
+      return;
     }
     const handler = Plaid.create({
       apiVersion: 'v2',
@@ -22,22 +23,20 @@ export class BankingService {
       env: environment.plaidConfig.env,
       product: ['auth', 'transactions'],
       key: environment.plaidConfig.publicKey,
-      onSuccess: this.getPlaidAccess
+      onSuccess: function getPlaidAccess(public_token) {
+        return self.http.post('http://localhost:3000' + '/api/get_access_token', {
+          public_token: public_token
+        }).subscribe(data => {
+          data = data.json();
+          if (data['error']) {
+            console.error(data['error']);
+            // TODO: Handle error
+          }
+          return self.setPlaidToken(data);
+        });
+      }
     });
     handler.open();
-  }
-
-  getPlaidAccess(public_token) {
-    return this.http.post('/api/get_access_token', {
-      public_token: public_token
-    }).subscribe(data => {
-      if (data['error']) {
-        console.error('issa error');
-        // TODO: Handle error
-      }
-      console.log(data);
-      return this.setPlaidToken(data);
-    });
   }
 
   checkPlaidToken() {
@@ -48,7 +47,7 @@ export class BankingService {
   }
 
   setPlaidToken(data) {
-    this.storageService.setInLocal('plaid_item_id', data.itemID);
-    return this.storageService.setInLocal('plaid_access_token', data.token);
+    this.storageService.setInLocal('plaid_item_id', data.item_id);
+    return this.storageService.setInLocal('plaid_access_token', data.access_token);
   }
 }

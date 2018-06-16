@@ -21,9 +21,12 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.getSheetID()
       .then((value: string) => {
-        console.log(value);
         this.sheetID = value;
       });
+  }
+
+  linkBankAccount() {
+    this.bankService.launchPlaidService();
   }
 
   saveSheetID() {

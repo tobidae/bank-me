@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { LoginComponent } from './views/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 import { BankingService } from './services/banking/banking.service';
 import { AuthService } from './services/auth/auth.service';
@@ -42,6 +43,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     AngularFireAuthModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpModule,
     HttpClientModule,
     routing,
     StorageServiceModule

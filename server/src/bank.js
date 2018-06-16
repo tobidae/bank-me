@@ -32,9 +32,9 @@ module.exports = {
     client.exchangePublicToken(PUBLIC_TOKEN, function (error, tokenResponse) {
       if (error != null) {
         var msg = 'Could not exchange public_token!';
-        console.log(msg + '\n' + JSON.stringify(error));
+        console.log(msg + '\n' + new Date());
         return response.json({
-          error: msg
+          error: error
         });
       }
       return response.json({
