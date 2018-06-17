@@ -1,7 +1,5 @@
 'use strict';
 
-require('dotenv').config();
-
 var express = require('express');
 var router = express.Router();
 
@@ -9,8 +7,6 @@ var bank = require('./src/bank');
 var sheet = require('./src/sheet');
 var moment = require('moment');
 var asyncUtility = require('async');
-
-var APP_PORT = 8000;
 
 function dateRange(startDate, endDate) {
   var result = [];
@@ -63,7 +59,3 @@ router.post('/transactions', (request, response) => {
 });
 
 module.exports = router;
-
-// var server = app.listen(APP_PORT, function () {
-//   console.log('server listening on port ' + APP_PORT);
-// });
