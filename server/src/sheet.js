@@ -11,7 +11,7 @@ const async = require('async');
 // You can get this from creating a google cloud project, then creating a service account under IAM & Admin.
 // NOTE: You'll have to add the client_email from the generated json to the google sheet by sharing.
 // More info here https://github.com/theoephraim/node-google-spreadsheet#service-account-recommended-method
-const credentials;
+var credentials;
 if (process.env.NODE_ENV != 'production') {
   credentials = require('./../config/service_account.json');
 } else {
