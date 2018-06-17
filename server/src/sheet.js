@@ -1,5 +1,4 @@
 'use strict';
-require('dotenv').config();
 
 const sheets = require('google-spreadsheet');
 const moment = require('moment');
@@ -68,8 +67,8 @@ function dateToFull(date) {
 }
 
 module.exports = {
-  exportTransactions: (transactions, title) => {
-    var googleDoc = new sheets(process.env.SHEET_ID);
+  exportTransactions: (sheetID, transactions, title) => {
+    var googleDoc = new sheets(sheetID);
     var currentTitle = title != "All TX" ? dateToFull(title) : title;
     var currentSheet = null;
     var allCurrentRows = null;

@@ -37,21 +37,22 @@ router.post('/transactions', (request, response) => {
   var endDate = moment(moment().format('YYYY-MM-DD'));
   var range = dateRange(startDate, endDate);
   var allTx = [];
-  response.setHeader('Content-Type', 'application/json')
+  var sheetID = request.body.sheetID;
+  response.setHeader('Content-Type', 'application/json');
 
   asyncUtility.eachSeries(range, function (date, next) {
     console.log(date);
     bank.getTransactions(date)
       .then(transactions => {
         allTx += transactions;
-        sheet.exportTransactions(transactions, date)
+        sheet.exportTransactions(sheetID, transactions, date)
           .then((data) => {
             response.write(data);
             next();
           });
       });
   }, (err) => {
-    sheet.exportTransactions(allTx, "All TX")
+    sheet.exportTransactions(sheetID, allTx, "All TX")
       .then((data) => {
         response.end(data);
       });
