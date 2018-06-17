@@ -33,23 +33,38 @@ router.post('/accounts', (request, response) => {
 });
 
 router.post('/transactions', (request, response) => {
-  var startDate = moment(moment().subtract(23, 'months').format('YYYY-MM-DD'));
-  var endDate = moment(moment().format('YYYY-MM-DD'));
+  var startDate = request.body.from;
+  var endDate = request.body.to;
+  var access_token = request.body.access_token;
   var range = dateRange(startDate, endDate);
   var allTx = [];
-  var sheetID = request.body.sheetID;
   response.setHeader('Content-Type', 'application/json');
 
-  asyncUtility.eachSeries(range, function (date, next) {
+  asyncUtility.eachSeries(range, (date, next) => {
     console.log(date);
-    bank.getTransactions(date)
+    bank.getTransactions(date, access_token)
       .then(transactions => {
         allTx += transactions;
-        sheet.exportTransactions(sheetID, transactions, date)
-          .then((data) => {
-            response.write(data);
-            next();
-          });
+        next();
+      });
+  }, (err) => {
+    response.end(allTx);
+  });
+});
+
+router.post('/send-to-sheet', (request, response) => {
+  var sheetID = request.body.sheetID;
+  var transactions = request.body.transactions;
+  var startDate = request.body.from;
+  var endDate = request.body.to;
+  var range = dateRange(startDate, endDate);
+
+  asyncUtility.eachSeries(range, (date, next) => {
+    console.log(date);
+    sheet.exportTransactions(sheetID, transactions, date)
+      .then((data) => {
+        response.write(data);
+        next();
       });
   }, (err) => {
     sheet.exportTransactions(sheetID, allTx, "All TX")

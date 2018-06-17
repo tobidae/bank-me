@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="data-ui" *ngIf="hasDoneTutorial && hasPlaidAccess">
+    <div class="data-ui" *ngIf="hasDoneTutorial && hasPlaidAccess && accountDetails">
       <div class="row">
         <div class="card-wrapper col-xl-3 col-md-6 col-12" *ngFor="let account of accountDetails">
           <div class="card data-card d-flex">
@@ -52,6 +52,20 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-8 col-lg-10 col-12 mx-auto">
+          <ngb-datepicker class="mx-auto" #dp (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" [maxDate]="maxDate"
+            [minDate]="minDate" [startDate]="maxDate">
+          </ngb-datepicker>
+          <ng-template #t let-date="date" let-focused="focused">
+            <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+              [class.faded]="isHovered(date) || isInside(date)" [class.disabled]="isNotInRange(date)"
+              (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+              {{ date.day }}
+            </span>
+          </ng-template>
         </div>
       </div>
     </div>

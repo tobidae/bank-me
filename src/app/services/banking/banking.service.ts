@@ -65,6 +65,26 @@ export class BankingService {
     });
   }
 
+  getBankTransactions(from, to) {
+    return new Promise((resolve, reject) => {
+      if (this.hasPlaidAccess()) {
+        this.http.post(this.host + '/api/transactions', {
+          access_token: this.plaidAccess.access_token,
+          from: from,
+          to: to
+        })
+          .toPromise()
+          .then(data => {
+            data = data.json();
+            console.log(data);
+            resolve(data);
+          });
+      } else {
+        resolve(null);
+      }
+    });
+  }
+
   hasPlaidAccess() {
     const plaid = this.plaidAccess;
 

@@ -14,7 +14,6 @@ const PLAID_ENV = process.env.PLAID_ENV || 'development';
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
-var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
 
 // Initialize the Plaid client
@@ -65,13 +64,13 @@ module.exports = {
         });
       });
   },
-  getTransactions: (date) => {
+  getTransactions: (date, access_token) => {
     // Pull transactions for the Item for the last 30 days
     var daysInMonth = moment(date).daysInMonth() - 1;
     var endDate = moment(date).add(daysInMonth, 'days').format('YYYY-MM-DD');
     var startDate = moment(date).format('YYYY-MM-DD');
 
-    return client.getTransactions(ACCESS_TOKEN, startDate, endDate, {
+    return client.getTransactions(access_token, startDate, endDate, {
         count: 500
       })
       .then(transactionsResponse => {
