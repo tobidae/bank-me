@@ -15,7 +15,7 @@ var credentials;
 if (process.env.NODE_ENV != 'production') {
   credentials = require('./../config/service_account.json');
 } else {
-  credentials = JSON.parse(process.env[SERVICE_ACCOUNT]);
+  credentials = JSON.parse(process.env.SERVICE_ACCOUNT);
 }
 
 // Returns created sheet
