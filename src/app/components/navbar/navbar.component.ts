@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  launchSettings(content) {
+  launchSettings() {
     this.modalService.open(SettingsComponent).result
       .then((result) => {
 
