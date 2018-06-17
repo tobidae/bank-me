@@ -6,21 +6,23 @@
 </div>
 <div class="modal-body">
 
-  <button class="btn btn-danger my-2 my-sm-0" (click)="bankService.deleteAccess()">Delete Access</button>
-  <form>
-    <div class="form-group">
-      <label for="dateOfBirth">Date of birth</label>
-      <div class="input-group">
-        <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <label>Your Google Sheet ID</label>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Google Sheet ID" required [(ngModel)]="sheetID">
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button">
-            bbuuu
-          </button>
+          <button class="btn btn-primary" type="button" (click)="saveSheetID()">Save Sheet ID</button>
         </div>
       </div>
+      <label class="error" *ngIf="sheetIDError">{{sheetIDError}}</label>
+      <label class="success" *ngIf="sheetIDSuccess">{{sheetIDSuccess}}</label>
     </div>
-  </form>
+  </div>
+  <div class="row justify-content-center">
+    <button class="btn btn-danger my-2 my-sm-0" (click)="deleteAccess()">Delete Access</button>
+  </div>
 </div>
-<div class="modal-footer">
+<!-- <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="saveSettings()">Save</button>
-</div>
+</div> -->

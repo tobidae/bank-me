@@ -49,7 +49,6 @@ export class DashboardComponent implements OnInit {
             return;
           }
           this.accountDetails = data['accounts'];
-          console.log(data);
         }
       });
   }

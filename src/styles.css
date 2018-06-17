@@ -2,3 +2,16 @@
 body {
   padding-top: 56px;
 }
+
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
+.error,
+.success {
+  font-weight: bold;
+}

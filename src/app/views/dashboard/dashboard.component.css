@@ -16,22 +16,13 @@
   margin-top: 10px;
 }
 
-.error {
-  color: red;
-}
-
 .error-ui {
   text-align: center;
-}
-
-.success {
-  color: green;
 }
 
 .error,
 .success {
   margin-top: 15px;
-  font-weight: bold;
 }
 
 .card-wrapper {
@@ -69,6 +60,7 @@
   padding-left: 0;
   padding-right: 0;
 }
+
 .data-card .card-info .col-3 {
   margin-top: auto;
 }
