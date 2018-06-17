@@ -4,13 +4,13 @@
   "main": "app.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node app.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "run": "ng build && node app.js",
-    "postinstall": "ng build --aot -prod"
+    "run": "ng build --prod && node app.js",
+    "postinstall": "ng build --prod"
   },
   "private": true,
   "dependencies": {

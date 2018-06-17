@@ -1,16 +1,21 @@
 import { Http } from '@angular/http';
-import { environment } from './../../../environments/environment.prod';
+import { environment } from './../../../environments/environment';
 import { Injectable, NgZone } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
+import 'rxjs/add/operator/toPromise';
 declare var Plaid: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class BankingService {
-
+  host: string;
   constructor(public http: Http, public storageService: StorageService, public ngZone: NgZone) {
-
+    if (!environment.production) {
+      this.host = 'http://localhost:8080';
+    } else {
+      this.host = '';
+    }
   }
 
   launchPlaidService() {
@@ -27,21 +32,19 @@ export class BankingService {
         product: ['auth', 'transactions'],
         key: environment.plaidConfig.publicKey,
         onSuccess: function getPlaidAccess(public_token) {
-          return self.http.post('http://localhost:3000' + '/api/get_access_token', {
-            public_token: public_token
-          }).subscribe(data => {
-            data = data.json();
-            if (data['error']) {
-              console.error(data['error']);
-              reject(data['error']);
-            }
-            self.setPlaidToken(data);
-            resolve(true);
-          });
+          return self.http.post(self.host + '/api/get_access_token', { public_token: public_token })
+            .toPromise()
+            .then(data => {
+              data = data.json();
+              if (data['error']) {
+                console.error(data['error']);
+                reject(data['error']);
+              }
+              self.setPlaidToken(data);
+              resolve(true);
+            });
         },
-        onError: function handleError(error) {
-          reject(error);
-        }
+        onError: this.handleError
       });
       handler.open();
     });
@@ -50,12 +53,12 @@ export class BankingService {
   getBankAccounts() {
     return new Promise((resolve, reject) => {
       if (this.hasPlaidAccess()) {
-        this.http.post('http://localhost:3000' + '/api/accounts', {
-          access_token: this.plaidAccess.access_token
-        }).subscribe(data => {
-          data = data.json();
-          resolve(data);
-        });
+        this.http.post(this.host + '/api/accounts', { access_token: this.plaidAccess.access_token })
+          .toPromise()
+          .then(data => {
+            data = data.json();
+            resolve(data);
+          });
       } else {
         resolve(null);
       }
@@ -84,5 +87,11 @@ export class BankingService {
     this.storageService.removeInLocal('plaid_item_id');
     this.storageService.removeInLocal('plaid_access_token');
     return Promise.resolve("done");
+  }
+
+  private handleError(error: any) {
+    const errMsg = (error.message) ? error.message :
+      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    console.error(errMsg); // log to console instead
   }
 }

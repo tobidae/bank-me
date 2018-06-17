@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   res.status(404).send('<h2 align=center>Page Not Found!</h2>');
 });
 
-const port = process.env.PORT || '3000';
+const port = process.env.PORT || '8080';
 app.set('port', port);
 
 const server = http.createServer(app);
