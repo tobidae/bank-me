@@ -1,10 +1,22 @@
 export interface BankAccount {
   name: string;
-  balances: any[];
+  balances: AccountBalance;
   subtype: string;
   mask: string;
   account_id: string;
   official_name: string;
+}
+export interface AccountBalance {
+  available: string;
+  current: string;
+  limit: string;
+}
+
+export interface AccountInfo {
+  account: string;
+  routing: string;
+  wire_routing: string;
+  account_id: string;
 }
 
 export interface BankTransaction {

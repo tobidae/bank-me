@@ -1,4 +1,8 @@
-.card {
+.container-fluid {
+  padding: 30px;
+}
+
+.setup-ui .card {
   width: 50rem;
   margin-top: 20px;
 }
@@ -12,15 +16,73 @@
   margin-top: 10px;
 }
 
-.error{
+.error {
   color: red;
+}
+
+.error-ui {
+  text-align: center;
 }
 
 .success {
   color: green;
 }
 
-.error, .success {
+.error,
+.success {
   margin-top: 15px;
   font-weight: bold;
+}
+
+.card-wrapper {
+  margin-bottom: 20px;
+}
+
+.data-card .card-header {
+  padding: 0.3rem 1.25rem;
+}
+
+.data-card .card-header .card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #555;
+  display: inline-block;
+}
+
+.data-card .card-info {
+  padding: 10px 20px;
+}
+
+.data-card .card-info .card-value {
+  font-size: 1.8em;
+  font-weight: 400;
+  margin-bottom: 0rem;
+}
+
+.data-card .card-info .row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.data-card .card-info .col-9,
+.data-card .card-info .col-3 {
+  padding-left: 0;
+  padding-right: 0;
+}
+.data-card .card-info .col-3 {
+  margin-top: auto;
+}
+
+.data-card .card-info .card-value.current {
+  font-size: 1em;
+  font-weight: lighter;
+}
+
+.data-card .card-info .card-value.mask,
+.data-card .card-info .card-value.limit {
+  font-weight: lighter;
+  font-size: 0.85em;
+  color: #666;
+  text-align: right;
+  vertical-align: bottom;
 }

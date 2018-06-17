@@ -9,7 +9,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { LoginComponent } from './views/login/login.component';
@@ -25,6 +25,7 @@ import { UserService } from './services/user/user.service';
 import { GettingStartedComponent } from './components/getting-started/getting-started.component';
 import { StorageServiceModule} from 'angular-webstorage-service';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     LoginComponent,
     RegisterComponent,
     GettingStartedComponent,
-    NavbarComponent
+    NavbarComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -48,12 +50,16 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     routing,
     StorageServiceModule
   ],
+  entryComponents: [
+    SettingsComponent
+  ],
   providers: [
     BankingService,
     AuthService,
     AuthGuard,
     UserService,
-    StorageService
+    StorageService,
+    NgbActiveModal
   ],
   bootstrap: [AppComponent]
 })

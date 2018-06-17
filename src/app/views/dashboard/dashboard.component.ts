@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { StorageService } from '../../services/storage/storage.service';
 import * as constants from '../../shared/constants';
+import { BankAccount, AccountBalance, AccountInfo, BankTransaction } from '../../shared/interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,6 +15,10 @@ export class DashboardComponent implements OnInit {
   sheetIDError = '';
   sheetIDSuccess = '';
 
+  accountDetails: BankAccount[];
+
+  errorMessage: string;
+
   constructor(public authService: AuthService, public storageService: StorageService,
     public bankService: BankingService) {
   }
@@ -23,10 +28,30 @@ export class DashboardComponent implements OnInit {
       .then((value: string) => {
         this.sheetID = value;
       });
+    this.getBankDetails();
   }
 
   linkBankAccount() {
-    this.bankService.launchPlaidService();
+    return this.bankService.launchPlaidService()
+      .then(() => {
+        this.getBankDetails();
+      });
+  }
+
+  getBankDetails() {
+    return this.bankService.getBankAccounts()
+      .then(data => {
+        if (data) {
+          if (data['error']) {
+            // Lazy error handling, errors here usually have something to do with the account type
+            // Loan payment accounts may not come up well (mine didn't)
+            this.errorMessage = data['error'];
+            return;
+          }
+          this.accountDetails = data['accounts'];
+          console.log(data);
+        }
+      });
   }
 
   saveSheetID() {
@@ -60,6 +85,6 @@ export class DashboardComponent implements OnInit {
   }
 
   get hasPlaidAccess() {
-    return this.bankService.checkPlaidToken();
+    return this.bankService.hasPlaidAccess();
   }
 }

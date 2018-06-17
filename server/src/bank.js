@@ -46,7 +46,7 @@ module.exports = {
   getAccounts: (request, response) => {
     // Retrieve high-level account information and account and routing numbers
     // for each account associated with the Item.
-    return client.getAuth(ACCESS_TOKEN)
+    return client.getAuth(request.body.access_token)
       .then(authResponse => {
         response.json({
           error: false,
@@ -58,7 +58,8 @@ module.exports = {
         var msg = 'Unable to pull accounts from the Plaid API.';
         console.log(msg + '\n' + JSON.stringify(error));
         return response.json({
-          error: msg
+          error: error.error_message,
+          errorCode: error.error_code
         });
       });
   },

@@ -1,0 +1,26 @@
+<div class="modal-header">
+  <h4 class="modal-title">Profile update</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <button class="btn btn-danger my-2 my-sm-0" (click)="bankService.deleteAccess()">Delete Access</button>
+  <form>
+    <div class="form-group">
+      <label for="dateOfBirth">Date of birth</label>
+      <div class="input-group">
+        <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="dp.toggle()" type="button">
+            bbuuu
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="saveSettings()">Save</button>
+</div>

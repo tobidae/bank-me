@@ -32,7 +32,7 @@ router.post('/get_access_token', (request, response) => {
   bank.getAccessToken(request, response);
 });
 
-router.get('/accounts', (request, response) => {
+router.post('/accounts', (request, response) => {
   bank.getAccounts(request, response);
 });
 

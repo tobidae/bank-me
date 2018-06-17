@@ -35,11 +35,15 @@ export class StorageService {
   }
 
   setInLocal(key, val): void {
-    console.log('recieved = key:' + key + 'value:' + val);
+    console.log('recieved = key:' + key + ' value:' + val);
     this.storage.set(key, val);
   }
 
   getInLocal(key): any {
     return this.storage.get(key);
+  }
+
+  removeInLocal(key): any {
+    return this.storage.remove(key);
   }
 }
