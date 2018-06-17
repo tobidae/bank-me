@@ -1,5 +1,9 @@
 'use strict';
 
+if (process.env.NODE_ENV != 'production') {
+  require('dotenv').config();
+}
+
 const sheets = require('google-spreadsheet');
 const moment = require('moment');
 const async = require('async');
@@ -7,7 +11,12 @@ const async = require('async');
 // You can get this from creating a google cloud project, then creating a service account under IAM & Admin.
 // NOTE: You'll have to add the client_email from the generated json to the google sheet by sharing.
 // More info here https://github.com/theoephraim/node-google-spreadsheet#service-account-recommended-method
-const credentials = require('./../config/service_account.json');
+const credentials;
+if (process.env.NODE_ENV != 'production') {
+  credentials = require('./../config/service_account.json');
+} else {
+  credentials = JSON.parse(process.env[SERVICE_ACCOUNT]);
+}
 
 // Returns created sheet
 function createSheet(googleDoc, month) {
