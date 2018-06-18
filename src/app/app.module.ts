@@ -27,7 +27,7 @@ import { StorageServiceModule} from 'angular-webstorage-service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { MomentModule } from 'ngx-moment';
-import { StripperPipe } from './pipes/stripper/stripper.pipe';
+import { TransactionComponent } from './components/transaction/transaction.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import { StripperPipe } from './pipes/stripper/stripper.pipe';
     GettingStartedComponent,
     NavbarComponent,
     SettingsComponent,
-    StripperPipe
+    TransactionComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +55,8 @@ import { StripperPipe } from './pipes/stripper/stripper.pipe';
     MomentModule
   ],
   entryComponents: [
-    SettingsComponent
+    SettingsComponent,
+    TransactionComponent
   ],
   providers: [
     BankingService,

@@ -12,10 +12,6 @@
   margin: 25px 0;
 }
 
-.row {
-  margin-top: 10px;
-}
-
 .error-ui {
   text-align: center;
 }
@@ -95,3 +91,11 @@
   margin-bottom: 20px;
 }
 
+.tx-card .badge {
+  margin-right: 6px;
+}
+
+.tx-card .tx-amount,
+.tx-card button {
+  float: right;
+}
