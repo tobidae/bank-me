@@ -24,6 +24,29 @@ const client = new plaid.Client(
   plaid.environments[PLAID_ENV]
 );
 
+function getPaginatedTransactions(input, currentOffset, transactions, callback) {
+  var count = 50;
+  var totalTx = 0;
+
+  return client.getTransactions(input.access_token, input.from, input.to, {
+      count: count,
+      offset: currentOffset
+    })
+    .then(transactionsResponse => {
+      totalTx = parseInt(transactionsResponse.total_transactions);
+      var newTxs = transactions.concat(transactionsResponse.transactions);
+
+      if (currentOffset < totalTx) {
+        getPaginatedTransactions(input, newTxs.length, newTxs, callback);
+      } else {
+        callback(null, transactions);
+      }
+    })
+    .catch(error => {
+      callback(error, transactions);
+    })
+}
+
 module.exports = {
   init: (request, response) => {
     response.send("API is live");
@@ -64,23 +87,24 @@ module.exports = {
         });
       });
   },
-  getTransactions: (date, access_token) => {
-    // Pull transactions for the Item for the last 30 days
-    var daysInMonth = moment(date).daysInMonth() - 1;
-    var endDate = moment(date).add(daysInMonth, 'days').format('YYYY-MM-DD');
-    var startDate = moment(date).format('YYYY-MM-DD');
+  getTransactions: (from, to, access_token) => {
+    var transactions = [];
+    var input = {
+      from: from,
+      to: to,
+      access_token: access_token
+    }
 
-    return client.getTransactions(access_token, startDate, endDate, {
-        count: 500
+    return new Promise((resolve, reject) => {
+      getPaginatedTransactions(input, 0, transactions, (err, result) => {
+        if (err) {
+          reject({
+            error: err,
+            transactions: result
+          });
+        }
+        resolve(result);
       })
-      .then(transactionsResponse => {
-        return transactionsResponse.transactions;
-      })
-      .catch(error => {
-        console.log(JSON.stringify(error));
-        return response.json({
-          error: error
-        });
-      })
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Http } from '@angular/http';
 import { environment } from './../../../environments/environment';
 import { Injectable, NgZone } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
+import * as moment from 'moment';
 import 'rxjs/add/operator/toPromise';
 declare var Plaid: any;
 
@@ -66,18 +67,23 @@ export class BankingService {
   }
 
   getBankTransactions(from, to) {
+    let fromClone = Object.assign({}, from);
+    let toClone = Object.assign({}, to);
+    fromClone.month -= 1;
+    toClone.month -= 1;
+    fromClone = moment(fromClone).format('YYYY-MM-DD');
+    toClone = moment(toClone).format('YYYY-MM-DD');
+
     return new Promise((resolve, reject) => {
       if (this.hasPlaidAccess()) {
         this.http.post(this.host + '/api/transactions', {
           access_token: this.plaidAccess.access_token,
-          from: from,
-          to: to
+          from: fromClone,
+          to: toClone
         })
           .toPromise()
           .then(data => {
-            data = data.json();
-            console.log(data);
-            resolve(data);
+            resolve(data.json());
           });
       } else {
         resolve(null);

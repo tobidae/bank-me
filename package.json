@@ -35,6 +35,8 @@
     "express": "^4.16.3",
     "firebase": "^5.0.4",
     "font-awesome": "^4.7.0",
+    "moment": "^2.22.2",
+    "ngx-moment": "^3.0.1",
     "rxjs": "^6.2.1",
     "rxjs-compat": "^6.2.1",
     "zone.js": "^0.8.26"

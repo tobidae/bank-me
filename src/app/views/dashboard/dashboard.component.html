@@ -54,18 +54,52 @@
           </div>
         </div>
       </div>
+      <hr/>
       <div class="row">
-        <div class="col-xl-8 col-lg-10 col-12 mx-auto">
-          <ngb-datepicker class="mx-auto" #dp (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" [maxDate]="maxDate"
-            [minDate]="minDate" [startDate]="maxDate">
-          </ngb-datepicker>
-          <ng-template #t let-date="date" let-focused="focused">
-            <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
-              [class.faded]="isHovered(date) || isInside(date)" [class.disabled]="isNotInRange(date)"
-              (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
-              {{ date.day }}
-            </span>
-          </ng-template>
+        <div class="card-wrapper col-xl-8 col-lg-10 col-12 mx-auto">
+          <form class="calendar-form form-inline justify-content-center">
+            <div class="form-group">
+              <label>From:</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp-from" [(ngModel)]="fromDate" ngbDatepicker #dFrom="ngbDatepicker"
+                  [maxDate]="maxDate" [minDate]="minDate">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="dFrom.toggle()" type="button">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>To:</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp-to" [(ngModel)]="toDate" ngbDatepicker #dTo="ngbDatepicker"
+                  [maxDate]="maxDate" [minDate]="minDate">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="dTo.toggle()" type="button">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-success" (click)="getTransactions()">
+                <i class="fa fa-download" aria-hidden="true"></i> Get Transactions
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-8 col-lg-8 col-md-10 col-12 mx-auto" *ngFor="let tx of transactionDetails">
+          <div class="tx-card card">
+            <div class="card-body">
+              <h5 class="card-title">{{tx.name}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                <i class="fa fa-calendar"></i> {{tx.date | amDateFormat:'LL'}}
+              </h6>
+            </div>
+          </div>
         </div>
       </div>
     </div>

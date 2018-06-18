@@ -26,6 +26,8 @@ import { GettingStartedComponent } from './components/getting-started/getting-st
 import { StorageServiceModule} from 'angular-webstorage-service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { MomentModule } from 'ngx-moment';
+import { StripperPipe } from './pipes/stripper/stripper.pipe';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     RegisterComponent,
     GettingStartedComponent,
     NavbarComponent,
-    SettingsComponent
+    SettingsComponent,
+    StripperPipe
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     HttpModule,
     HttpClientModule,
     routing,
-    StorageServiceModule
+    StorageServiceModule,
+    MomentModule
   ],
   entryComponents: [
     SettingsComponent

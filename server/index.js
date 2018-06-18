@@ -16,7 +16,6 @@ function dateRange(startDate, endDate) {
     result.push(currentDate.format("YYYY-MM-01"));
     startDate.add(1, 'month');
   }
-  result.push(endDate.format("YYYY-MM-01"));
   return result;
 }
 
@@ -33,23 +32,22 @@ router.post('/accounts', (request, response) => {
 });
 
 router.post('/transactions', (request, response) => {
+  response.setHeader('Content-Type', 'application/json');
+
   var startDate = request.body.from;
   var endDate = request.body.to;
   var access_token = request.body.access_token;
-  var range = dateRange(startDate, endDate);
-  var allTx = [];
-  response.setHeader('Content-Type', 'application/json');
 
-  asyncUtility.eachSeries(range, (date, next) => {
-    console.log(date);
-    bank.getTransactions(date, access_token)
-      .then(transactions => {
-        allTx += transactions;
-        next();
-      });
-  }, (err) => {
-    response.end(allTx);
-  });
+  bank.getTransactions(startDate, endDate, access_token)
+    .then(transactions => {
+      response.json(transactions);
+    })
+    .catch(data => {
+      response.status(400).json({
+        error: data.error,
+        transactions: data.transactions
+      })
+    });
 });
 
 router.post('/send-to-sheet', (request, response) => {
@@ -57,10 +55,12 @@ router.post('/send-to-sheet', (request, response) => {
   var transactions = request.body.transactions;
   var startDate = request.body.from;
   var endDate = request.body.to;
+  startDate = moment(startDate);
+  endDate = moment(endDate);
+
   var range = dateRange(startDate, endDate);
 
   asyncUtility.eachSeries(range, (date, next) => {
-    console.log(date);
     sheet.exportTransactions(sheetID, transactions, date)
       .then((data) => {
         response.write(data);
