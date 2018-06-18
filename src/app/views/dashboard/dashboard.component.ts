@@ -27,6 +27,8 @@ export class DashboardComponent implements OnInit {
   maxDate: NgbDateStruct;
   minDate: NgbDateStruct;
 
+  isLoadingTransactions = false;
+
   constructor(public authService: AuthService, public storageService: StorageService,
     public bankService: BankingService, public calendar: NgbCalendar,
     public modalService: NgbModal) {
@@ -68,10 +70,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getTransactions() {
+    this.isLoadingTransactions = true;
     return this.bankService.getBankTransactions(this.fromDate, this.toDate)
       .then((transactions: BankTransaction[]) => {
         this.transactionDetails = transactions;
-        console.log(transactions);
+        this.isLoadingTransactions = false;
       });
   }
 

@@ -25,7 +25,7 @@ const client = new plaid.Client(
 );
 
 function getPaginatedTransactions(input, currentOffset, transactions, callback) {
-  var count = 50;
+  var count = 500;
   var totalTx = 0;
 
   return client.getTransactions(input.access_token, input.from, input.to, {
@@ -36,10 +36,10 @@ function getPaginatedTransactions(input, currentOffset, transactions, callback) 
       totalTx = parseInt(transactionsResponse.total_transactions);
       var newTxs = transactions.concat(transactionsResponse.transactions);
 
-      if (currentOffset < totalTx) {
+      if (currentOffset < totalTx && totalTx > count) {
         getPaginatedTransactions(input, newTxs.length, newTxs, callback);
       } else {
-        callback(null, transactions);
+        callback(null, newTxs);
       }
     })
     .catch(error => {
