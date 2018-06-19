@@ -1,4 +1,5 @@
-import { Http } from '@angular/http';
+import { AuthService } from './../auth/auth.service';
+import { Http, Headers } from '@angular/http';
 import { environment } from './../../../environments/environment';
 import { Injectable, NgZone } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
@@ -11,12 +12,19 @@ declare var Plaid: any;
 })
 export class BankingService {
   host: string;
-  constructor(public http: Http, public storageService: StorageService, public ngZone: NgZone) {
+  headers: Headers;
+
+  constructor(public http: Http, public storageService: StorageService,
+    public ngZone: NgZone, public authService: AuthService) {
     if (!environment.production) {
       this.host = 'http://localhost:8080';
     } else {
       this.host = '';
     }
+
+    this.headers = new Headers();
+    this.headers.append('Content-Type', 'application/json');
+    this.headers.append('Access-Control-Allow-Origin', '*');
   }
 
   launchPlaidService() {
@@ -32,20 +40,29 @@ export class BankingService {
         env: environment.plaidConfig.env,
         product: ['auth', 'transactions'],
         key: environment.plaidConfig.publicKey,
-        onSuccess: function getPlaidAccess(public_token) {
-          return self.http.post(self.host + '/api/get_access_token', { public_token: public_token })
-            .toPromise()
-            .then(data => {
-              data = data.json();
-              if (data['error']) {
-                console.error(data['error']);
-                reject(data['error']);
+        onSuccess: function (public_token) {
+          return self.authService.userToken()
+            .then(token => {
+
+              if (token) {
+                self.headers.set('Authorization', `Bearer ${token}`);
+                return self.http.post(self.host + '/api/get_access_token', { public_token: public_token }, {
+                  headers: self.headers
+                })
+                  .toPromise()
+                  .then(data => {
+                    data = data.json();
+                    if (data['error']) {
+                      console.error(data['error']);
+                      reject(data['error']);
+                    }
+                    self.setPlaidToken(data);
+                    resolve(true);
+                  });
               }
-              self.setPlaidToken(data);
-              resolve(true);
             });
         },
-        onError: this.handleError
+        onExit: this.handleError
       });
       handler.open();
     });
@@ -54,11 +71,21 @@ export class BankingService {
   getBankAccounts() {
     return new Promise((resolve, reject) => {
       if (this.hasPlaidAccess()) {
-        this.http.post(this.host + '/api/accounts', { access_token: this.plaidAccess.access_token })
-          .toPromise()
-          .then(data => {
-            data = data.json();
-            resolve(data);
+
+        return this.authService.userToken()
+          .then(token => {
+
+            if (token) {
+              this.headers.set('Authorization', `Bearer ${token}`);
+              this.http.post(this.host + '/api/accounts', { access_token: this.plaidAccess.access_token }, {
+                headers: this.headers
+              })
+                .toPromise()
+                .then(data => {
+                  data = data.json();
+                  resolve(data);
+                });
+            }
           });
       } else {
         resolve(null);
@@ -76,15 +103,26 @@ export class BankingService {
 
     return new Promise((resolve, reject) => {
       if (this.hasPlaidAccess()) {
-        this.http.post(this.host + '/api/transactions', {
-          access_token: this.plaidAccess.access_token,
-          from: fromClone,
-          to: toClone
-        })
-          .toPromise()
-          .then(data => {
-            resolve(data.json());
+        return this.authService.userToken()
+          .then(token => {
+
+            if (token) {
+              this.headers.set('Authorization', `Bearer ${token}`);
+              const body = JSON.stringify({
+                access_token: this.plaidAccess.access_token,
+                from: fromClone,
+                to: toClone
+              });
+              this.http.post(this.host + '/api/transactions', body, {
+                headers: this.headers
+              })
+                .toPromise()
+                .then(data => {
+                  resolve(data.json());
+                });
+            }
           });
+
       } else {
         resolve(null);
       }

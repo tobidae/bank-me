@@ -2,24 +2,67 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
+const fireAdmin = require('firebase-admin');
+const cors = require('cors');
 const app = express();
 
 const api = require('./server/index');
+const ignoredUrls = [
+  '/login',
+  '/register'
+]
+var credentials;
 
-// TODO: allow-cors for development only
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-})
+
+if (process.env.NODE_ENV != 'production') {
+  app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+  credentials = require('./server/config/service_account.json');
+} else {
+  credentials = JSON.parse(process.env.SERVICE_ACCOUNT);
+}
+
+fireAdmin.initializeApp({
+  credential: fireAdmin.credential.cert(credentials),
+  databaseURL: process.env.FIREBASE_DB_URL
+});
+
+validateFirebaseIdToken = (req, res, next) => {
+  if (ignoredUrls.includes(req.path)) {
+    next();
+  }
+  if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
+    return res.status(401).send({
+      error: 'Unauthorized, missing authorization header!'
+    });
+  }
+
+  const idToken = req.headers.authorization.split('Bearer ')[1];
+
+  fireAdmin.auth().verifyIdToken(idToken)
+    .then(user => {
+      res.locals.user = user;
+      return next();
+    })
+    .catch(error => {
+      return res.status(401).send({
+        error: 'Unauthorized, error verifying token!',
+        info: error
+      });
+    });
+};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+app.use(cors());
+app.use(validateFirebaseIdToken);
 app.use(express.static(path.join(__dirname, 'dist')));
-
 app.use('/api', api);
 
 app.get('*', (req, res) => {

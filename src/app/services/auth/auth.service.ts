@@ -48,6 +48,16 @@ export class AuthService {
     });
   }
 
+  userToken() {
+    return this._firebaseAuth.auth.currentUser.getIdToken(true)
+      .then(token => {
+        return token;
+      }, err => {
+        console.log(err);
+        return null;
+      });
+  }
+
   isLoggedIn() {
     if (this.userDetails == null) {
       return false;

@@ -48,6 +48,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## ToDo
 - Add filtering of tx types
+- Filter by tx category, price range
 - Add visual representation of tx
 - Beautify the Google sheet (maybe, I mean who cares?!)
 - Actual business name for tx names (crap's ugly)
