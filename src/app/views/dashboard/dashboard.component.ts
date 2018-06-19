@@ -29,10 +29,13 @@ export class DashboardComponent implements OnInit {
 
   isLoadingTransactions = false;
 
+  transactionList: string[];
+
   constructor(public authService: AuthService, public storageService: StorageService,
     public bankService: BankingService, public calendar: NgbCalendar,
     public modalService: NgbModal) {
 
+    this.transactionList = [];
     this.minDate = calendar.getPrev(calendar.getToday(), 'm', 24);
     this.maxDate = calendar.getToday();
     this.toDate = calendar.getToday();
@@ -81,6 +84,14 @@ export class DashboardComponent implements OnInit {
   openTransaction(tx) {
     const transRef = this.modalService.open(TransactionComponent);
     transRef.componentInstance.tx = tx;
+  }
+
+  onTxChecked(isChecked, txID) {
+    if (isChecked) {
+      this.transactionList.push(txID);
+    } else if (!isChecked && this.transactionList.indexOf(txID) > -1) {
+      this.transactionList.splice(this.transactionList.indexOf(txID), 1);
+    }
   }
 
   saveSheetID() {

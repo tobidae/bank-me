@@ -1,0 +1,26 @@
+.tx-card {
+  margin-bottom: 20px;
+}
+
+.tx-card .badge {
+  margin-right: 6px;
+}
+
+.tx-card .card-title span {
+  font-size: 0.75rem;
+}
+
+.tx-card .tx-amount,
+.tx-card button {
+  float: right;
+  clear: right;
+}
+
+.tx-card .tx-checkbox {
+  margin-left: 10px;
+}
+
+.tx-card .card-body {
+  padding-left: 0.75rem;
+}
+

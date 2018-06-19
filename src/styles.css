@@ -15,3 +15,7 @@ body {
 .success {
   font-weight: bold;
 }
+
+app-loader {
+  margin: 0 auto;
+}

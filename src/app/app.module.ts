@@ -28,6 +28,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { MomentModule } from 'ngx-moment';
 import { TransactionComponent } from './components/transaction/transaction.component';
+import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { TransactionComponent } from './components/transaction/transaction.compo
     GettingStartedComponent,
     NavbarComponent,
     SettingsComponent,
-    TransactionComponent
+    TransactionComponent,
+    TransactionCardComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
