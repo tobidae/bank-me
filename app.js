@@ -31,6 +31,7 @@ fireAdmin.initializeApp({
 });
 
 validateFirebaseIdToken = (req, res, next) => {
+  console.log(req.path);
   if (ignoredUrls.includes(req.path)) {
     next();
   }
