@@ -23,12 +23,6 @@ fireAdmin.initializeApp({
   databaseURL: process.env.FIREBASE_DB_URL
 });
 
-Array.prototype.partContains = function (fullObj) {
-  return this.some(obj => {
-    return fullObj.includes(obj);
-  })
-};
-
 validateFirebaseIdToken = (req, res, next) => {
   if (ignoredUrls.includes(req.path)) {
     next();
@@ -63,7 +57,6 @@ app.use(bodyParser.urlencoded({
 app.use(cors({
   origin: true
 }));
-// app.use(validateFirebaseIdToken);
 
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/api', validateFirebaseIdToken, api);
