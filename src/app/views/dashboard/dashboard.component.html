@@ -32,6 +32,7 @@
       </div>
     </div>
 
+    <!-- Account with info view -->
     <div class="data-ui" *ngIf="hasDoneTutorial && hasPlaidAccess && accountDetails">
       <div class="row">
         <div class="card-wrapper col-xl-3 col-md-6 col-12" *ngFor="let account of accountDetails">
@@ -55,6 +56,7 @@
         </div>
       </div>
       <hr/>
+      <!-- Transactions Filter View -->
       <div class="row">
         <div class="card-wrapper col-xl-8 col-lg-10 col-12 mx-auto">
           <form class="calendar-form form-inline justify-content-center">
@@ -90,6 +92,7 @@
           </form>
         </div>
       </div>
+      <!-- Transaction cards view -->
       <div class="row">
         <app-loader *ngIf="isLoadingTransactions"></app-loader>
         <div class="container-fluid" *ngIf="!isLoadingTransactions">

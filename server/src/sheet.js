@@ -1,9 +1,5 @@
 'use strict';
 
-if (process.env.NODE_ENV != 'production') {
-  require('dotenv').config();
-}
-
 const sheets = require('google-spreadsheet');
 const moment = require('moment');
 const async = require('async');
@@ -13,16 +9,17 @@ const async = require('async');
 // More info here https://github.com/theoephraim/node-google-spreadsheet#service-account-recommended-method
 var credentials;
 if (process.env.NODE_ENV != 'production') {
+  require('dotenv').config();
   credentials = require('./../config/service_account.json');
 } else {
   credentials = JSON.parse(process.env.SERVICE_ACCOUNT);
 }
 
 // Returns created sheet
-function createSheet(googleDoc, month) {
+function createSheet(googleDoc, title) {
   return new Promise(resolve => {
     googleDoc.addWorksheet({
-      title: month,
+      title: title,
       rowCount: 1000,
       colCount: 10
     }, async function (err, sheet) {
@@ -39,7 +36,7 @@ function createSheet(googleDoc, month) {
 }
 
 // Returns sheet if it exists
-function checkForSheet(googleDoc, month) {
+function checkForSheet(googleDoc, title) {
   return new Promise(resolve => {
     googleDoc.getInfo((err, info) => {
       if (err) {
@@ -49,7 +46,7 @@ function checkForSheet(googleDoc, month) {
 
       var monthSheet = null;
       info.worksheets.forEach(worksheet => {
-        if (worksheet.title == month) {
+        if (worksheet.title == title) {
           monthSheet = worksheet;
           return false;
         }
@@ -72,7 +69,7 @@ function getRows(googleSheet) {
 }
 
 function dateToFull(date) {
-  return moment(date).format("MMMM YYYY");
+  return moment(date).format("MMM YYYY");
 }
 
 module.exports = {
