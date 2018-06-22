@@ -8,18 +8,11 @@ const app = express();
 
 const api = require('./server/index');
 const ignoredUrls = [
-  '/login',
-  '/register'
+
 ]
 var credentials;
 
-
 if (process.env.NODE_ENV != 'production') {
-  app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
   credentials = require('./server/config/service_account.json');
 } else {
   credentials = JSON.parse(process.env.SERVICE_ACCOUNT);
@@ -30,29 +23,36 @@ fireAdmin.initializeApp({
   databaseURL: process.env.FIREBASE_DB_URL
 });
 
+Array.prototype.partContains = function (fullObj) {
+  return this.some(obj => {
+    return fullObj.includes(obj);
+  })
+};
+
 validateFirebaseIdToken = (req, res, next) => {
   if (ignoredUrls.includes(req.path)) {
-    return next();
-  }
-  if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
-    return res.status(401).send({
-      error: 'Unauthorized, missing authorization header!'
-    });
-  }
-
-  const idToken = req.headers.authorization.split('Bearer ')[1];
-
-  fireAdmin.auth().verifyIdToken(idToken)
-    .then(user => {
-      res.locals.user = user;
-      return next();
-    })
-    .catch(error => {
+    next();
+  } else {
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
       return res.status(401).send({
-        error: 'Unauthorized, error verifying token!',
-        info: error
+        error: 'Unauthorized, missing authorization header!'
       });
-    });
+    }
+
+    const idToken = req.headers.authorization.split('Bearer ')[1];
+
+    fireAdmin.auth().verifyIdToken(idToken)
+      .then(user => {
+        res.locals.user = user;
+        return next();
+      })
+      .catch(error => {
+        return res.status(401).send({
+          error: 'Unauthorized, error verifying token!',
+          info: error
+        });
+      });
+  }
 };
 
 app.use(bodyParser.json());
@@ -60,10 +60,13 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-app.use(cors());
-app.use(validateFirebaseIdToken);
+app.use(cors({
+  origin: true
+}));
+// app.use(validateFirebaseIdToken);
+
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use('/api', api);
+app.use('/api', validateFirebaseIdToken, api);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
