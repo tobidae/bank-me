@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   sheetIDSuccess = '';
 
   accountDetails: BankAccount[];
+  allTransactionDetails: BankTransaction[];
   transactionDetails: BankTransaction[];
   txSubscription: Subscription;
 
@@ -70,6 +71,7 @@ export class DashboardComponent implements OnInit {
         this.sheetID = value;
       });
     this.txSubscription = this.bankService.observableTransaction.subscribe(txs => {
+      this.allTransactionDetails = txs;
       this.transactionDetails = txs;
       if (txs && this.rawCategories) {
         this.populateCategoryFilter();
@@ -80,7 +82,7 @@ export class DashboardComponent implements OnInit {
     this.getTransactions();
   }
 
-  checkAllTx(e) {
+  checkAllTx() {
     this.selectAllTxText = this.selectAllTx ? "Unselect" : "Select";
     this.transactionDetails.forEach(tx => tx.isTxSelected = this.selectAllTx);
   }
@@ -93,8 +95,34 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onCategoryChange() {
-    console.log(this.categoryModel);
+  onCategoryChange(filter?) {
+    if (!filter && this.categoryModel.length === 0) {
+      this.transactionDetails = Object.assign([], this.allTransactionDetails);
+      return;
+    }
+
+    this.transactionDetails = [];
+    this.allTransactionDetails.forEach(tx => {
+      if (!filter) {
+        this.categoryModel.forEach(category => {
+          if (tx.category.indexOf(category) > -1) {
+            this.transactionDetails.push(tx);
+          }
+        });
+      } else if (tx.category.indexOf(filter) > -1) {
+        this.categoryModel = [filter];
+        this.transactionDetails.push(tx);
+        console.log(tx);
+      }
+    });
+  }
+
+  clearFilters() {
+    this.categoryModel = [];
+    this.onCategoryChange();
+
+    this.selectAllTx = false;
+    this.checkAllTx();
   }
 
   goToPrevious() {
@@ -151,13 +179,13 @@ export class DashboardComponent implements OnInit {
     const categories = [];
 
     console.time("1");
-    this.transactionDetails.forEach(tx => {
+    this.allTransactionDetails.forEach(tx => {
       if (rawCategoriesID.indexOf(tx.category_id) < 0) {
         rawCategoriesID.push(tx.category_id);
       }
     });
     filters = this.rawCategories.filter(category => {
-      if (rawCategoriesID.indexOf(category.category_id) > 0) {
+      if (rawCategoriesID.indexOf(category.category_id) > -1) {
         return true;
       }
     });
@@ -175,9 +203,7 @@ export class DashboardComponent implements OnInit {
       });
     });
     console.timeEnd("1");
-    console.log(this.categoryOptions);
   }
-
 
   openTransaction(tx) {
     const transRef = this.modalService.open(TransactionComponent);

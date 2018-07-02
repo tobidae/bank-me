@@ -107,11 +107,17 @@
           <div class="form-row filter-row">
             <div class="btn-group-toggle filter-group">
               <label class="btn-primary" ngbButtonLabel>
-                <input type="checkbox" ngbButton [(ngModel)]="selectAllTx" (change)="checkAllTx($event)" id="allTxCheck"> {{selectAllTxText}} All Tx
+                <input type="checkbox" ngbButton [(ngModel)]="selectAllTx" (change)="checkAllTx()" id="allTxCheck"> {{selectAllTxText}} All Tx
               </label>
             </div>
             <div class="filter-group" *ngIf="categoryOptions.length > 0">
-              <ss-multiselect-dropdown [options]="categoryOptions" [texts]="categoryOptionsText" [settings]="categoryOptionsSettings" [(ngModel)]="categoryModel" (ngModelChange)="onCategoryChange($event)"></ss-multiselect-dropdown>
+              <ss-multiselect-dropdown [options]="categoryOptions" [texts]="categoryOptionsText" [settings]="categoryOptionsSettings" [(ngModel)]="categoryModel"
+                (ngModelChange)="onCategoryChange()"></ss-multiselect-dropdown>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="btn btn-outline-danger" (click)="clearFilters()">
+                Clear Filters
+              </button>
             </div>
           </div>
         </div>
@@ -122,7 +128,8 @@
       </div>
       <div class="row" *ngIf="!isLoadingTransactions">
         <div class="col-xl-8 col-lg-9 col-md-10 col-12 mx-auto">
-          <app-transaction-card *ngFor="let tx of transactionDetails" [tx]="tx" (checked)="onTxChecked(tx.isTxSelected, tx.transaction_id)"></app-transaction-card>
+          <app-transaction-card *ngFor="let tx of transactionDetails" [tx]="tx" (checked)="onTxChecked(tx.isTxSelected, tx.transaction_id)"
+            (singleFilter)="onCategoryChange($event)"></app-transaction-card>
         </div>
       </div>
     </div>

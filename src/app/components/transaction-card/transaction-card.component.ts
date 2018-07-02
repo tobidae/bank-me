@@ -11,6 +11,7 @@ import { TransactionComponent } from './../../components/transaction/transaction
 export class TransactionCardComponent implements OnInit {
   @Input() tx: BankTransaction;
   @Output() checked: any = new EventEmitter<boolean>();
+  @Output() singleFilter: any = new EventEmitter<string>();
 
   isTxSelected: boolean;
   constructor(public modalService: NgbModal) { }
@@ -25,6 +26,10 @@ export class TransactionCardComponent implements OnInit {
 
   checkTx(e) {
     this.checked.emit(this.tx.isTxSelected);
+  }
+
+  filterCategory(category) {
+    this.singleFilter.emit(category);
   }
 
 }
