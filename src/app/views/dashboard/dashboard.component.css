@@ -87,3 +87,29 @@
   margin-right: 10px;
 }
 
+.btn.btn-round {
+  width: 50px;
+  height: 50px;
+  padding: 6px 0px;
+  border-radius: 25px;
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  /* line-height: 1.42857; */
+}
+
+.form-select-all {
+  margin-left: 10px;
+}
+
+.form-select-all label {
+  margin-left: 10px;
+}
+
+.filter-row {
+  padding-bottom: 20px;
+}
+
+.filter-row .filter-group {
+  margin-right: 15px;
+}

@@ -6,6 +6,8 @@ import { StorageService } from '../storage/storage.service';
 import * as moment from 'moment';
 import 'rxjs/add/operator/toPromise';
 declare var Plaid: any;
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BankTransaction } from '../../shared/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,9 @@ declare var Plaid: any;
 export class BankingService {
   host: string;
   headers: Headers;
+
+  observableTransaction: BehaviorSubject<BankTransaction[]>;
+  txDetails: Array<BankTransaction>;
 
   constructor(public http: Http, public storageService: StorageService,
     public ngZone: NgZone, public authService: AuthService) {
@@ -25,6 +30,8 @@ export class BankingService {
     this.headers = new Headers();
     this.headers.append('Content-Type', 'application/json');
     this.headers.append('Access-Control-Allow-Origin', '*');
+
+    this.observableTransaction = new BehaviorSubject<BankTransaction[]>(this.txDetails);
   }
 
   launchPlaidService() {
@@ -118,7 +125,43 @@ export class BankingService {
               })
                 .toPromise()
                 .then(data => {
+                  this.txDetails = data.json();
+                  this.txEventChange();
+                  resolve();
+                })
+                .catch(error => {
+                  reject(error);
+                });
+            }
+          });
+
+      } else {
+        resolve(null);
+      }
+    });
+  }
+
+  txEventChange() {
+    this.observableTransaction.next(this.txDetails);
+  }
+
+  getCategories() {
+    return new Promise((resolve, reject) => {
+      if (this.hasPlaidAccess()) {
+        return this.authService.userToken()
+          .then(token => {
+
+            if (token) {
+              this.headers.set('Authorization', `Bearer ${token}`);
+              this.http.get(this.host + '/api/categories', {
+                headers: this.headers
+              })
+                .toPromise()
+                .then(data => {
                   resolve(data.json());
+                })
+                .catch(error => {
+                  reject(error);
                 });
             }
           });

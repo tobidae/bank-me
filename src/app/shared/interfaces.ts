@@ -1,4 +1,4 @@
-export interface BankAccount {
+export class BankAccount {
   name: string;
   balances: AccountBalance;
   subtype: string;
@@ -6,27 +6,29 @@ export interface BankAccount {
   account_id: string;
   official_name: string;
 }
-export interface AccountBalance {
+export class AccountBalance {
   available: string;
   current: string;
   limit: string;
 }
 
-export interface AccountInfo {
+export class AccountInfo {
   account: string;
   routing: string;
   wire_routing: string;
   account_id: string;
 }
 
-export interface BankTransaction {
+export class BankTransaction {
   name: string;
   category: [string];
+  category_id: string;
   amount: string;
   date: string;
   account_id: string;
   transaction_id: string;
   pending: boolean;
+  isTxSelected: boolean;
 }
 
 export enum PlaidErrors {

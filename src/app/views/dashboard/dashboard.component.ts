@@ -6,6 +6,8 @@ import { StorageService } from '../../services/storage/storage.service';
 import * as constants from '../../shared/constants';
 import { BankAccount, AccountBalance, AccountInfo, BankTransaction } from '../../shared/interfaces';
 import { NgbDateStruct, NgbCalendar, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +21,7 @@ export class DashboardComponent implements OnInit {
 
   accountDetails: BankAccount[];
   transactionDetails: BankTransaction[];
+  txSubscription: Subscription;
 
   errorMessage: string;
 
@@ -30,6 +33,25 @@ export class DashboardComponent implements OnInit {
   isLoadingTransactions = false;
 
   transactionList: string[];
+
+  hasPrevious = false;
+  hasNext = false;
+  currentPage = 1;
+  maxPage = 4;
+
+  selectAllTx = false;
+  selectAllTxText = "Select";
+
+  categoryOptions: IMultiSelectOption[] = [];
+  categoryModel: string[] = [];
+  categoryOptionsText: IMultiSelectTexts = {
+    searchEmptyResult: "No Category found",
+    defaultTitle: "Select Category"
+  };
+  categoryOptionsSettings: IMultiSelectSettings = {
+    buttonClasses: "btn btn-info"
+  };
+  rawCategories: any[];
 
   constructor(public authService: AuthService, public storageService: StorageService,
     public bankService: BankingService, public calendar: NgbCalendar,
@@ -47,7 +69,42 @@ export class DashboardComponent implements OnInit {
       .then((value: string) => {
         this.sheetID = value;
       });
+    this.txSubscription = this.bankService.observableTransaction.subscribe(txs => {
+      this.transactionDetails = txs;
+      if (txs && this.rawCategories) {
+        this.populateCategoryFilter();
+      }
+    });
     this.getBankDetails();
+    this.getCategories();
+    this.getTransactions();
+  }
+
+  checkAllTx(e) {
+    this.selectAllTxText = this.selectAllTx ? "Unselect" : "Select";
+    this.transactionDetails.forEach(tx => tx.isTxSelected = this.selectAllTx);
+  }
+
+  goToNext() {
+    this.hasPrevious = true;
+    this.currentPage++;
+    if (this.currentPage === this.maxPage) {
+      this.hasNext = false;
+    }
+  }
+
+  onCategoryChange() {
+    console.log(this.categoryModel);
+  }
+
+  goToPrevious() {
+    this.currentPage--;
+    if (this.currentPage > 1) {
+      this.hasPrevious = true;
+    } else {
+      this.hasPrevious = false;
+      this.hasNext = true;
+    }
   }
 
   linkBankAccount() {
@@ -75,11 +132,52 @@ export class DashboardComponent implements OnInit {
   getTransactions() {
     this.isLoadingTransactions = true;
     return this.bankService.getBankTransactions(this.fromDate, this.toDate)
-      .then((transactions: BankTransaction[]) => {
-        this.transactionDetails = transactions;
+      .then(() => {
         this.isLoadingTransactions = false;
+        this.hasNext = true;
       });
   }
+
+  getCategories() {
+    return this.bankService.getCategories()
+      .then((categories: any) => {
+        this.rawCategories = categories;
+      });
+  }
+
+  populateCategoryFilter() {
+    let filters = [];
+    const rawCategoriesID = [];
+    const categories = [];
+
+    console.time("1");
+    this.transactionDetails.forEach(tx => {
+      if (rawCategoriesID.indexOf(tx.category_id) < 0) {
+        rawCategoriesID.push(tx.category_id);
+      }
+    });
+    filters = this.rawCategories.filter(category => {
+      if (rawCategoriesID.indexOf(category.category_id) > 0) {
+        return true;
+      }
+    });
+    filters.forEach(data => {
+      data.hierarchy.forEach(category => {
+        if (categories.indexOf(category) < 0) {
+          categories.push(category);
+        }
+      });
+    });
+    categories.forEach(category => {
+      this.categoryOptions.push({
+        id: category,
+        name: category
+      });
+    });
+    console.timeEnd("1");
+    console.log(this.categoryOptions);
+  }
+
 
   openTransaction(tx) {
     const transRef = this.modalService.open(TransactionComponent);

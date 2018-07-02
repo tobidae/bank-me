@@ -32,8 +32,8 @@
       </div>
     </div>
 
-    <!-- Account with info view -->
     <div class="data-ui" *ngIf="hasDoneTutorial && hasPlaidAccess && accountDetails">
+      <!-- Account with info view -->
       <div class="row">
         <div class="card-wrapper col-xl-3 col-md-6 col-12" *ngFor="let account of accountDetails">
           <div class="card data-card d-flex">
@@ -43,12 +43,12 @@
             <div class="card-info">
               <div class="row">
                 <div class="col-9">
-                  <h3 class="card-value">Avail: ${{account.balances.available}}</h3>
-                  <p class="current card-value">Bal: ${{account.balances.current}}</p>
+                  <h3 class="card-value">Avail: {{account.balances.available | currency}}</h3>
+                  <p class="current card-value">Bal: {{account.balances.current | currency}}</p>
                 </div>
                 <div class="col-3">
                   <p class="mask card-value">x{{account.mask}}</p>
-                  <p class="limit card-value" *ngIf="account.balances.limit">Limit: ${{account.balances.limit}}</p>
+                  <p class="limit card-value" *ngIf="account.balances.limit">Limit: {{account.balances.limit | currency}}</p>
                 </div>
               </div>
             </div>
@@ -58,8 +58,13 @@
       <hr/>
       <!-- Transactions Filter View -->
       <div class="row">
-        <div class="card-wrapper col-xl-8 col-lg-10 col-12 mx-auto">
+        <div class="card-wrapper col-xl-10 col-lg-10 col-12 mx-auto">
           <form class="calendar-form form-inline justify-content-center">
+            <div class="form-group" *ngIf="hasPrevious">
+              <button type="button" class="btn btn-primary" (click)="goToPrevious()">
+                Previous
+              </button>
+            </div>
             <div class="form-group">
               <label>Get transactions from:</label>
               <div class="input-group">
@@ -89,14 +94,35 @@
                 <i class="fa fa-download" aria-hidden="true"></i> Get Transactions
               </button>
             </div>
+            <div class="form-group" *ngIf="hasNext">
+              <button type="button" class="btn btn-primary" (click)="goToNext()">
+                Next
+              </button>
+            </div>
           </form>
         </div>
       </div>
-      <!-- Transaction cards view -->
       <div class="row">
-        <app-loader *ngIf="isLoadingTransactions"></app-loader>
-        <div class="container-fluid" *ngIf="!isLoadingTransactions">
-          <app-transaction-card *ngFor="let tx of transactionDetails" [tx]="tx" (checked)="onTxChecked($event, tx.transaction_id)"></app-transaction-card>
+        <div class="col-xl-8 col-lg-9 col-md-10 col-12 mx-auto">
+          <div class="form-row filter-row">
+            <div class="btn-group-toggle filter-group">
+              <label class="btn-primary" ngbButtonLabel>
+                <input type="checkbox" ngbButton [(ngModel)]="selectAllTx" (change)="checkAllTx($event)" id="allTxCheck"> {{selectAllTxText}} All Tx
+              </label>
+            </div>
+            <div class="filter-group" *ngIf="categoryOptions.length > 0">
+              <ss-multiselect-dropdown [options]="categoryOptions" [texts]="categoryOptionsText" [settings]="categoryOptionsSettings" [(ngModel)]="categoryModel" (ngModelChange)="onCategoryChange($event)"></ss-multiselect-dropdown>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Transaction cards view -->
+      <div class="row" *ngIf="isLoadingTransactions">
+        <app-loader></app-loader>
+      </div>
+      <div class="row" *ngIf="!isLoadingTransactions">
+        <div class="col-xl-8 col-lg-9 col-md-10 col-12 mx-auto">
+          <app-transaction-card *ngFor="let tx of transactionDetails" [tx]="tx" (checked)="onTxChecked(tx.isTxSelected, tx.transaction_id)"></app-transaction-card>
         </div>
       </div>
     </div>

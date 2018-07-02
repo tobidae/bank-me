@@ -9,7 +9,7 @@ import { TransactionComponent } from './../../components/transaction/transaction
   styleUrls: ['./transaction-card.component.css']
 })
 export class TransactionCardComponent implements OnInit {
-  @Input() tx: any;
+  @Input() tx: BankTransaction;
   @Output() checked: any = new EventEmitter<boolean>();
 
   isTxSelected: boolean;
@@ -24,7 +24,7 @@ export class TransactionCardComponent implements OnInit {
   }
 
   checkTx(e) {
-    this.checked.emit(this.isTxSelected);
+    this.checked.emit(this.tx.isTxSelected);
   }
 
 }

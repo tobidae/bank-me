@@ -7,9 +7,7 @@ const cors = require('cors');
 const app = express();
 
 const api = require('./server/index');
-const ignoredUrls = [
-
-]
+const ignoredUrls = [];
 var credentials;
 
 if (process.env.NODE_ENV != 'production') {

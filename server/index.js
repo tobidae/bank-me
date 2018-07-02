@@ -31,6 +31,10 @@ router.post('/accounts', (request, response) => {
   bank.getAccounts(request, response);
 });
 
+router.get('/categories', (request, response) => {
+  bank.getCategories(request, response);
+});
+
 router.post('/transactions', (request, response) => {
   response.setHeader('Content-Type', 'application/json');
 
@@ -43,10 +47,7 @@ router.post('/transactions', (request, response) => {
       response.json(transactions);
     })
     .catch(data => {
-      response.status(400).json({
-        error: data.error,
-        transactions: data.transactions
-      })
+      response.status(400).json(error);
     });
 });
 

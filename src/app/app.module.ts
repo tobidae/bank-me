@@ -30,6 +30,7 @@ import { MomentModule } from 'ngx-moment';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { LoaderComponent } from './components/loader/loader.component';
     HttpClientModule,
     routing,
     StorageServiceModule,
-    MomentModule
+    MomentModule,
+    MultiselectDropdownModule
   ],
   entryComponents: [
     SettingsComponent,

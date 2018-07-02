@@ -24,29 +24,6 @@ const client = new plaid.Client(
   plaid.environments[PLAID_ENV]
 );
 
-function getPaginatedTransactions(input, currentOffset, transactions, callback) {
-  var count = 500;
-  var totalTx = 0;
-
-  return client.getTransactions(input.access_token, input.from, input.to, {
-      count: count,
-      offset: currentOffset
-    })
-    .then(transactionsResponse => {
-      totalTx = parseInt(transactionsResponse.total_transactions);
-      var newTxs = transactions.concat(transactionsResponse.transactions);
-
-      if (currentOffset < totalTx && totalTx > count) {
-        getPaginatedTransactions(input, newTxs.length, newTxs, callback);
-      } else {
-        callback(null, newTxs);
-      }
-    })
-    .catch(error => {
-      callback(error, transactions);
-    })
-}
-
 module.exports = {
   init: (request, response) => {
     response.send("API is live");
@@ -88,23 +65,15 @@ module.exports = {
       });
   },
   getTransactions: (from, to, access_token) => {
-    var transactions = [];
-    var input = {
-      from: from,
-      to: to,
-      access_token: access_token
-    }
-
-    return new Promise((resolve, reject) => {
-      getPaginatedTransactions(input, 0, transactions, (err, result) => {
-        if (err) {
-          reject({
-            error: err,
-            transactions: result
-          });
-        }
-        resolve(result);
+    return client.getAllTransactions(access_token, from, to);
+  },
+  getCategories: (request, response) => {
+    return client.getCategories()
+      .then(data => {
+        response.json(data.categories);
       })
-    });
+      .catch(error => {
+        response.status(400).json(error);
+      });
   }
 }
