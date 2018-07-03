@@ -31,6 +31,7 @@ import { TransactionComponent } from './components/transaction/transaction.compo
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import { ObjKeysPipe } from './pipes/obj-keys/obj-keys.pipe';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
     SettingsComponent,
     TransactionComponent,
     TransactionCardComponent,
-    LoaderComponent
+    LoaderComponent,
+    ObjKeysPipe
   ],
   imports: [
     BrowserModule,

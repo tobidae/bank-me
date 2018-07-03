@@ -12,8 +12,8 @@ export class TransactionCardComponent implements OnInit {
   @Input() tx: BankTransaction;
   @Output() checked: any = new EventEmitter<boolean>();
   @Output() singleFilter: any = new EventEmitter<string>();
+  // isTxSelected = false;
 
-  isTxSelected: boolean;
   constructor(public modalService: NgbModal) { }
 
   ngOnInit() {

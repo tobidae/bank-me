@@ -111,7 +111,7 @@
           <div class="form-row filter-row">
             <div class="btn-group-toggle filter-group">
               <label class="btn-primary" ngbButtonLabel>
-                <input type="checkbox" ngbButton [(ngModel)]="selectAllTx" (change)="checkAllTx()" id="allTxCheck"> {{selectAllTxText}} All Tx
+                <input type="checkbox" ngbButton [(ngModel)]="selectAllTx" (change)="checkAllTx()" id="allTxCheck"> {{selectAllTxText}}
               </label>
             </div>
             <div class="filter-group" *ngIf="categoryOptions.length > 0">
@@ -132,7 +132,7 @@
       </div>
       <div class="row" *ngIf="!isLoadingTransactions">
         <div class="col-xl-8 col-lg-9 col-md-10 col-12 mx-auto">
-          <app-transaction-card *ngFor="let tx of transactionDetails" [tx]="tx" (checked)="onTxChecked(tx.isTxSelected, tx.transaction_id)"
+          <app-transaction-card *ngFor="let index of transactionDetails | objKeys" [tx]="transactionDetails[index]" (checked)="onTxChecked(transactionDetails[index])"
             (singleFilter)="onCategoryChange($event)"></app-transaction-card>
         </div>
       </div>

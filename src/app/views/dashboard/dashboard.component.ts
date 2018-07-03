@@ -20,8 +20,8 @@ export class DashboardComponent implements OnInit {
   sheetIDSuccess = '';
 
   accountDetails: BankAccount[];
-  allTransactionDetails: BankTransaction[];
-  transactionDetails: BankTransaction[];
+  allTransactionDetails = {};
+  transactionDetails = {};
   txSubscription: Subscription;
 
   errorMessage: string;
@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit {
 
   isLoadingTransactions = false;
 
-  transactionList: string[];
 
   hasPrevious = false;
   hasNext = false;
@@ -58,7 +57,6 @@ export class DashboardComponent implements OnInit {
     public bankService: BankingService, public calendar: NgbCalendar,
     public modalService: NgbModal) {
 
-    this.transactionList = [];
     this.minDate = calendar.getPrev(calendar.getToday(), 'm', 24);
     this.maxDate = calendar.getToday();
     this.toDate = calendar.getToday();
@@ -70,9 +68,20 @@ export class DashboardComponent implements OnInit {
       .then((value: string) => {
         this.sheetID = value;
       });
-    this.txSubscription = this.bankService.observableTransaction.subscribe(txs => {
-      this.allTransactionDetails = txs;
-      this.transactionDetails = txs;
+    this.txSubscription = this.bankService.observableTransaction.subscribe((txs: BankTransaction[]) => {
+      this.allTransactionDetails = {};
+      this.transactionDetails = {};
+
+      for (const index in txs) {
+        const tx = txs[index];
+        tx.isTxSelected = false;
+        this.allTransactionDetails[tx.transaction_id] = tx;
+        this.transactionDetails[tx.transaction_id] = tx;
+      }
+
+      // Check all tx by default when they are added
+      this.selectAllTx = true;
+      this.checkAllTx();
       if (txs && this.rawCategories) {
         this.populateCategoryFilter();
       }
@@ -83,8 +92,11 @@ export class DashboardComponent implements OnInit {
   }
 
   checkAllTx() {
-    this.selectAllTxText = this.selectAllTx ? "Unselect" : "Select";
-    this.transactionDetails.forEach(tx => tx.isTxSelected = this.selectAllTx);
+    this.selectAllTxText = this.selectAllTx ? "Unselect All Tx" : "Select All Tx";
+
+    for (const txID in this.transactionDetails) {
+      this.transactionDetails[txID].isTxSelected = this.selectAllTx;
+    }
   }
 
   goToNext() {
@@ -97,27 +109,27 @@ export class DashboardComponent implements OnInit {
 
   onCategoryChange(filter?) {
     if (!filter && this.categoryModel.length === 0) {
-      this.transactionDetails = Object.assign([], this.allTransactionDetails);
+      this.transactionDetails = Object.assign({}, this.allTransactionDetails);
       return;
     }
 
-    this.transactionDetails = [];
+    this.transactionDetails = {};
 
     if (filter) {
       this.categoryModel = [filter];
     }
-
-    this.allTransactionDetails.forEach(tx => {
+    for (const txID in this.allTransactionDetails) {
+      const tx = this.allTransactionDetails[txID];
       if (!filter) {
         this.categoryModel.forEach(category => {
           if (tx.category.indexOf(category) > -1) {
-            this.transactionDetails.push(tx);
+            this.transactionDetails[tx.transaction_id] = tx;
           }
         });
       } else if (tx.category.indexOf(filter) > -1) {
-        this.transactionDetails.push(tx);
+        this.transactionDetails[tx.transaction_id] = tx;
       }
-    });
+    }
   }
 
   clearFilters() {
@@ -182,11 +194,12 @@ export class DashboardComponent implements OnInit {
     const rawCategoriesID = [];
     const categories = [];
 
-    this.allTransactionDetails.forEach(tx => {
+    for (const txID in this.allTransactionDetails) {
+      const tx = this.allTransactionDetails[txID];
       if (rawCategoriesID.indexOf(tx.category_id) < 0) {
         rawCategoriesID.push(tx.category_id);
       }
-    });
+    }
     filters = this.rawCategories.filter(category => {
       if (rawCategoriesID.indexOf(category.category_id) > -1) {
         return true;
@@ -214,12 +227,17 @@ export class DashboardComponent implements OnInit {
     transRef.componentInstance.tx = tx;
   }
 
-  onTxChecked(isChecked, txID) {
-    if (isChecked) {
-      this.transactionList.push(txID);
-    } else if (!isChecked && this.transactionList.indexOf(txID) > -1) {
-      this.transactionList.splice(this.transactionList.indexOf(txID), 1);
+  onTxChecked(tx: BankTransaction) {
+    let counter = 0;
+    this.transactionDetails[tx.transaction_id].isTxSelected = tx.isTxSelected;
+
+    for (const id in this.transactionDetails) {
+      const transaction = this.transactionDetails[id];
+      if (transaction.isTxSelected) {
+        counter++;
+      }
     }
+    this.selectAllTxText = `${counter} Tx selected`;
   }
 
   saveSheetID() {

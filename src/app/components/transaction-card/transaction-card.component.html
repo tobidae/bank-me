@@ -1,6 +1,6 @@
 <div class="tx-card card">
   <div class="form-check form-check-inline">
-    <input class="form-check-input tx-checkbox" type="checkbox" [(ngModel)]="tx.isTxSelected" (change)="checkTx($event)" id="txCheck">
+    <input class="form-check-input tx-checkbox" type="checkbox" [(ngModel)]="tx.isTxSelected" (ngModelChange)="checkTx($event)" id="txCheck">
     <div class="card-body">
       <div class="row">
         <div class="col-xl-9 col-lg-8 col-md-8 col-8">
