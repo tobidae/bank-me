@@ -24,3 +24,6 @@
   padding-left: 0.75rem;
 }
 
+.badge-click {
+  cursor: pointer;
+}

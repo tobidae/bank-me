@@ -58,13 +58,15 @@
       <hr/>
       <!-- Transactions Filter View -->
       <div class="row">
-        <div class="card-wrapper col-xl-10 col-lg-10 col-12 mx-auto">
+        <div class="card-wrapper col-1">
+          <div class="nav-div justify-content-center">
+            <button type="button" class="btn btn-primary" (click)="goToPrevious()" *ngIf="hasPrevious">
+              Previous
+            </button>
+          </div>
+        </div>
+        <div class="card-wrapper col-xl-10 col-lg-10">
           <form class="calendar-form form-inline justify-content-center">
-            <div class="form-group" *ngIf="hasPrevious">
-              <button type="button" class="btn btn-primary" (click)="goToPrevious()">
-                Previous
-              </button>
-            </div>
             <div class="form-group">
               <label>Get transactions from:</label>
               <div class="input-group">
@@ -94,12 +96,14 @@
                 <i class="fa fa-download" aria-hidden="true"></i> Get Transactions
               </button>
             </div>
-            <div class="form-group" *ngIf="hasNext">
-              <button type="button" class="btn btn-primary" (click)="goToNext()">
-                Next
-              </button>
-            </div>
           </form>
+        </div>
+        <div class="card-wrapper col-1">
+          <div class="nav-div justify-content-center float-right">
+            <button type="button" class="btn btn-primary" (click)="goToNext()" *ngIf="hasNext">
+              Next
+            </button>
+          </div>
         </div>
       </div>
       <div class="row">

@@ -102,6 +102,11 @@ export class DashboardComponent implements OnInit {
     }
 
     this.transactionDetails = [];
+
+    if (filter) {
+      this.categoryModel = [filter];
+    }
+
     this.allTransactionDetails.forEach(tx => {
       if (!filter) {
         this.categoryModel.forEach(category => {
@@ -110,9 +115,7 @@ export class DashboardComponent implements OnInit {
           }
         });
       } else if (tx.category.indexOf(filter) > -1) {
-        this.categoryModel = [filter];
         this.transactionDetails.push(tx);
-        console.log(tx);
       }
     });
   }
@@ -158,6 +161,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getTransactions() {
+    this.clearFilters();
     this.isLoadingTransactions = true;
     return this.bankService.getBankTransactions(this.fromDate, this.toDate)
       .then(() => {
@@ -178,7 +182,6 @@ export class DashboardComponent implements OnInit {
     const rawCategoriesID = [];
     const categories = [];
 
-    console.time("1");
     this.allTransactionDetails.forEach(tx => {
       if (rawCategoriesID.indexOf(tx.category_id) < 0) {
         rawCategoriesID.push(tx.category_id);
@@ -196,13 +199,14 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
+    categories.sort();
+    this.categoryOptions = [];
     categories.forEach(category => {
       this.categoryOptions.push({
         id: category,
         name: category
       });
     });
-    console.timeEnd("1");
   }
 
   openTransaction(tx) {
