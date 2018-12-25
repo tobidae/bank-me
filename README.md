@@ -1,6 +1,6 @@
 # [Bank Me](http://bank-me.tobiak.com)
 
-Collects your bank transaction details and exports the data to a Google sheet along with the transaction category (Food, Entertainment, e.t.c). 
+Collects your bank transaction details and exports the data to a CSV file or Google sheet along with the transaction category (Food, Entertainment, e.t.c). 
 
 ## Why Bank Me?
 1. Good for budgeting by using past spending patterns to budget for the future
@@ -13,7 +13,7 @@ Collects your bank transaction details and exports the data to a Google sheet al
 2. [Google Cloud Project](https://console.cloud.google.com/) for service account
 3. [Google Sheet](https://sheets.google.com)
 4. [Firebase](https://firebase.com)
-5. Service host like Heroku, Digital Cloud, e.t.c
+5. Service host like Heroku
 
 ## Configuration
 For this project to work in its entirety, you need a plaid account which is free and a service account from Google Cloud to create a headless user that can access your Google Sheet.
@@ -42,7 +42,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Features
-- Export bank statement to google sheet by month
+- Export bank statement to CSV
 - View account balance from UI
 - View and Filter transactions by date range
 - Filter transactions by type

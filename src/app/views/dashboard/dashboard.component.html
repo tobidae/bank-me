@@ -58,13 +58,6 @@
       <hr/>
       <!-- Transactions Filter View -->
       <div class="row">
-        <div class="card-wrapper col-1">
-          <div class="nav-div justify-content-center">
-            <button type="button" class="btn btn-primary" (click)="goToPrevious()" *ngIf="hasPrevious">
-              Previous
-            </button>
-          </div>
-        </div>
         <div class="card-wrapper col-xl-10 col-lg-10">
           <form class="calendar-form form-inline justify-content-center">
             <div class="form-group">
@@ -102,13 +95,6 @@
               </button>
             </div>
           </form>
-        </div>
-        <div class="card-wrapper col-1">
-          <div class="nav-div justify-content-center float-right">
-            <button type="button" class="btn btn-primary" (click)="goToNext()" *ngIf="hasNext">
-              Next
-            </button>
-          </div>
         </div>
       </div>
       <div class="row">

@@ -33,10 +33,7 @@ export class DashboardComponent implements OnInit {
 
   isLoadingTransactions = false;
 
-  hasPrevious = false;
   hasNext = false;
-  currentPage = 1;
-  maxPage = 4;
 
   selectAllTx = false;
   selectAllTxText = "Select";
@@ -53,8 +50,8 @@ export class DashboardComponent implements OnInit {
   rawCategories: any[];
 
   constructor(public authService: AuthService, public storageService: StorageService,
-    public bankService: BankingService, public calendar: NgbCalendar,
-    public modalService: NgbModal) {
+              public bankService: BankingService, public calendar: NgbCalendar,
+              public modalService: NgbModal) {
 
     this.minDate = calendar.getPrev(calendar.getToday(), 'm', 24);
     this.maxDate = calendar.getToday();
@@ -98,14 +95,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  goToNext() {
-    this.hasPrevious = true;
-    this.currentPage++;
-    if (this.currentPage === this.maxPage) {
-      this.hasNext = false;
-    }
-  }
-
   onCategoryChange(filter?) {
     if (!filter && this.categoryModel.length === 0) {
       this.transactionDetails = Object.assign({}, this.allTransactionDetails);
@@ -137,16 +126,6 @@ export class DashboardComponent implements OnInit {
 
     this.selectAllTx = false;
     this.checkAllTx();
-  }
-
-  goToPrevious() {
-    this.currentPage--;
-    if (this.currentPage > 1) {
-      this.hasPrevious = true;
-    } else {
-      this.hasPrevious = false;
-      this.hasNext = true;
-    }
   }
 
   linkBankAccount() {
@@ -186,7 +165,7 @@ export class DashboardComponent implements OnInit {
     const a = document.createElement("a");
     a.setAttribute('style', 'display:none;');
     document.body.appendChild(a);
-    const blob = new Blob([csvData], { type: 'text/csv' });
+    const blob = new Blob([csvData], {type: 'text/csv'});
     const url = window.URL.createObjectURL(blob);
     a.href = url;
     a.download = 'transactions.csv';
