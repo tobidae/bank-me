@@ -45,10 +45,9 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 - Export bank statement to google sheet by month
 - View account balance from UI
 - View and Filter transactions by date range
+- Filter transactions by type
 
 ## ToDo
-- Add filtering of tx types
-- Filter by tx category, price range
 - Add visual representation of tx
 - Beautify the Google sheet (maybe, I mean who cares?!)
 - Actual business name for tx names (crap's ugly)

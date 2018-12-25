@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit {
 
   isLoadingTransactions = false;
 
-
   hasPrevious = false;
   hasNext = false;
   currentPage = 1;
@@ -180,6 +179,67 @@ export class DashboardComponent implements OnInit {
         this.isLoadingTransactions = false;
         this.hasNext = true;
       });
+  }
+
+  exportTransactions() {
+    const csvData = this.convertToCSV(this.transactionDetails);
+    const a = document.createElement("a");
+    a.setAttribute('style', 'display:none;');
+    document.body.appendChild(a);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = 'transactions.csv';
+    a.click();
+  }
+
+  convertToCSV(obj: {}): string {
+    let header = '';
+    let allRows = '';
+    const headers = [];
+
+    // Get each row of the object data
+    for (const key in obj) {
+      if (!obj.hasOwnProperty(key)) continue;
+      let row = [];
+      const data = obj[key];
+
+      // In each row, get the fields, if no header, add the keys to the headers array
+      for (const rowKey in data) {
+        if (!data.hasOwnProperty(rowKey) || rowKey === 'account_owner' || rowKey === 'pending_transaction_id') continue;
+        if (header.length === 0 && rowKey !== 'isTxSelected') headers.push(rowKey.toUpperCase());
+
+        row.push(data[rowKey]);
+      }
+
+      if (header.length === 0) {
+        header = headers.join(', ')
+          .replace('account_owner,', '')
+          .replace('pending_transaction_id,', '');
+        allRows += header + '\r\n';
+      }
+
+      row = row.map(cell => {
+        console.log(cell);
+        // if the cell is an array, we have an embedded array in the cell, flatten with | separator
+        if (Array.isArray(cell)) {
+          cell = cell.join('|').replace(',', ' ');
+        }
+        if (cell && cell.hasOwnProperty('state')) {
+          cell = cell['state'];
+        }
+        if (cell && cell.hasOwnProperty('payment_method')) {
+          cell = cell['payment_method'];
+        }
+        if (!cell) {
+          cell = '';
+        }
+        return cell;
+      });
+      row = row.slice(0, -1);
+      allRows += row + '\r\n';
+    }
+    return allRows;
   }
 
   getCategories() {

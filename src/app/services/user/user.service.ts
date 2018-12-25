@@ -31,8 +31,8 @@ export class UserService {
       user.updateProfile({
         displayName: value.name,
         photoURL: user.photoURL
-      }).then(res => {
-        resolve(res);
+      }).then(() => {
+        resolve(true);
       }, err => reject(err));
     });
   }
