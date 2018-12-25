@@ -10,19 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  sheetID: string;
-  sheetIDError = '';
-  sheetIDSuccess = '';
-
-  constructor(public bankService: BankingService, public router: Router,
-    private modalService: NgbModal, public activeModal: NgbActiveModal,
-    private storageService: StorageService) { }
+  constructor(public bankService: BankingService, public router: Router, public activeModal: NgbActiveModal) { }
 
   ngOnInit() {
-    this.getSheetID()
-      .then((value: string) => {
-        this.sheetID = value;
-      });
   }
 
   deleteAccess() {
@@ -34,27 +24,5 @@ export class SettingsComponent implements OnInit {
   }
 
   saveSettings() {
-  }
-
-  saveSheetID() {
-    if (this.sheetID) {
-      this.sheetIDError = '';
-      this.storageService.saveInCloud('sheetID', this.sheetID)
-        .then(() => {
-          this.sheetIDSuccess = 'Added sheet ID to server';
-          this.sheetIDError = '';
-        })
-        .catch(error => {
-          this.sheetIDError = error;
-          this.sheetIDSuccess = '';
-        });
-    } else {
-      this.sheetIDError = 'Please enter a sheet ID';
-      this.sheetIDSuccess = '';
-    }
-  }
-
-  getSheetID() {
-    return this.storageService.getInCloud('sheetID');
   }
 }

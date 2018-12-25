@@ -1,26 +1,8 @@
 <app-navbar></app-navbar>
 <div class="container-fluid">
-  <app-getting-started *ngIf="!hasDoneTutorial" (isDoneWithTutorial)="saveHelpState($event)"></app-getting-started>
-
   <div *ngIf="!errorMessage">
 
-    <div class="setup-ui" *ngIf="hasDoneTutorial && !hasPlaidAccess">
-      <div class="card mx-auto">
-        <div class="card-body">
-          <h3 class="card-title header">You need to do a couple of things to get started</h3>
-          <div class="row justify-content-center">
-            <div class="col-md-8 col-md-offset-2">
-              <div class="form-group">
-                <label>Your Google Sheet ID</label>
-                <input type="text" required [(ngModel)]="sheetID" class="form-control">
-                <label class="error" *ngIf="sheetIDError">{{sheetIDError}}</label>
-                <label class="success" *ngIf="sheetIDSuccess">{{sheetIDSuccess}}</label>
-              </div>
-              <button class="btn btn-primary" (click)="saveSheetID()">Save Sheet ID</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="setup-ui" *ngIf="!hasPlaidAccess">
       <div class="card mx-auto">
         <div class="card-body">
           <div class="row justify-content-center">
@@ -32,7 +14,7 @@
       </div>
     </div>
 
-    <div class="data-ui" *ngIf="hasDoneTutorial && hasPlaidAccess && accountDetails">
+    <div class="data-ui" *ngIf="hasPlaidAccess && accountDetails">
       <!-- Account with info view -->
       <div class="row">
         <div class="card-wrapper col-xl-3 col-md-6 col-12" *ngFor="let account of accountDetails">

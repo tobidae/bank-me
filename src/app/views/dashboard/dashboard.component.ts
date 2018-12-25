@@ -15,10 +15,6 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  sheetID: string;
-  sheetIDError = '';
-  sheetIDSuccess = '';
-
   accountDetails: BankAccount[];
   allTransactionDetails = {};
   transactionDetails = {};
@@ -60,10 +56,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getSheetID()
-      .then((value: string) => {
-        this.sheetID = value;
-      });
     this.txSubscription = this.bankService.observableTransaction.subscribe((txs: BankTransaction[]) => {
       this.allTransactionDetails = {};
       this.transactionDetails = {};
@@ -182,6 +174,7 @@ export class DashboardComponent implements OnInit {
       if (!obj.hasOwnProperty(key)) continue;
       let row = [];
       const data = obj[key];
+      if (!data.isTxSelected) continue;
 
       // In each row, get the fields, if no header, add the keys to the headers array
       for (const rowKey in data) {
@@ -277,36 +270,6 @@ export class DashboardComponent implements OnInit {
       }
     }
     this.selectAllTxText = `${counter} Tx selected`;
-  }
-
-  saveSheetID() {
-    if (this.sheetID) {
-      this.sheetIDError = '';
-      this.storageService.saveInCloud('sheetID', this.sheetID)
-        .then(() => {
-          this.sheetIDSuccess = 'Added sheet ID to server';
-          this.sheetIDError = '';
-        })
-        .catch(error => {
-          this.sheetIDError = error;
-          this.sheetIDSuccess = '';
-        });
-    } else {
-      this.sheetIDError = 'Please enter a sheet ID';
-      this.sheetIDSuccess = '';
-    }
-  }
-
-  getSheetID() {
-    return this.storageService.getInCloud('sheetID');
-  }
-
-  saveHelpState(value) {
-    this.storageService.setInLocal(constants.HAS_DONE_TUTORIAL, value);
-  }
-
-  get hasDoneTutorial() {
-    return this.storageService.getInLocal(constants.HAS_DONE_TUTORIAL);
   }
 
   get hasPlaidAccess() {
