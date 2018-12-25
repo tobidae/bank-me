@@ -8,15 +8,6 @@
 
   <div class="row justify-content-center">
     <div class="col-12">
-      <label>Your Google Sheet ID</label>
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Google Sheet ID" required [(ngModel)]="sheetID">
-        <div class="input-group-append">
-          <button class="btn btn-primary" type="button" (click)="saveSheetID()">Save Sheet ID</button>
-        </div>
-      </div>
-      <label class="error" *ngIf="sheetIDError">{{sheetIDError}}</label>
-      <label class="success" *ngIf="sheetIDSuccess">{{sheetIDSuccess}}</label>
     </div>
   </div>
   <div class="row justify-content-center">
