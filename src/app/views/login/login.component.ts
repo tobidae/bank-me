@@ -22,6 +22,9 @@ export class LoginComponent implements OnInit {
     private ngZone: NgZone,
     public storageStorage: StorageService
   ) {
+  }
+
+  ngOnInit() {
     this.createForm();
   }
 
@@ -59,8 +62,4 @@ export class LoginComponent implements OnInit {
   saveUserDetails(data) {
     this.storageStorage.setInLocal('userID', data.user.uid);
   }
-
-  ngOnInit() {
-  }
-
 }

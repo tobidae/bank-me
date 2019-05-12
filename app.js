@@ -10,17 +10,25 @@ const api = require('./server/index');
 const ignoredUrls = [];
 var credentials;
 
-if (process.env.NODE_ENV != 'production') {
+if (process.env.NODE_ENV !== 'production') {
   credentials = require('./server/config/service_account.json');
 } else {
+  require("@google/cloud-trace").start();
   credentials = JSON.parse(process.env.SERVICE_ACCOUNT);
 }
 
+if (process.env.GCLOUD_PROJECT) {
+  require("@google/cloud-debug").start();
+}
+
+
+// Initialize the firebase admin module
 fireAdmin.initializeApp({
   credential: fireAdmin.credential.cert(credentials),
   databaseURL: process.env.FIREBASE_DB_URL
 });
 
+// Get the firebase token for a user and verify it server side
 validateFirebaseIdToken = (req, res, next) => {
   if (ignoredUrls.includes(req.path)) {
     next();
@@ -33,6 +41,7 @@ validateFirebaseIdToken = (req, res, next) => {
 
     const idToken = req.headers.authorization.split('Bearer ')[1];
 
+    // Pass in token from header and allow user or reject
     fireAdmin.auth().verifyIdToken(idToken)
       .then(user => {
         res.locals.user = user;
@@ -56,6 +65,7 @@ app.use(cors({
   origin: true
 }));
 
+// Make sure that each api request goes through the validate middleware
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/api', validateFirebaseIdToken, api);
 
