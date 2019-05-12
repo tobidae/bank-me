@@ -13,12 +13,7 @@ var credentials;
 if (process.env.NODE_ENV !== 'production') {
   credentials = require('./server/config/service_account.json');
 } else {
-  require("@google/cloud-trace").start();
   credentials = JSON.parse(process.env.SERVICE_ACCOUNT);
-}
-
-if (process.env.GCLOUD_PROJECT) {
-  require("@google/cloud-debug").start();
 }
 
 
