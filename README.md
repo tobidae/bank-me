@@ -1,4 +1,4 @@
-# [Bank Me](http://bank-me.tobiak.com)
+# [Bank Me](http://bank-me.herokuapp.com)
 
 Collects your bank transaction details and exports the data to a CSV file or Google sheet along with the transaction category (Food, Entertainment, e.t.c). 
 
