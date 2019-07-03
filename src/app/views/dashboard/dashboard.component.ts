@@ -62,7 +62,6 @@ export class DashboardComponent implements OnInit {
     }) => {
       this.allTransactionDetails = {};
       this.transactionDetails = {};
-      console.log(details);
 
       for (const type in details) {
         if (type === "transactions") {
@@ -74,9 +73,6 @@ export class DashboardComponent implements OnInit {
               this.transactionDetails[tx.transaction_id] = tx;
             }
           }
-        }
-        if (type === "accounts") {
-          this.accountDetails = details[type];
         }
       }
 
@@ -144,7 +140,6 @@ export class DashboardComponent implements OnInit {
     return this.bankService.getBankAccounts()
       .then(data => {
         if (data) {
-          console.log(data);
           if (data['error']) {
             // Lazy error handling, errors here usually have something to do with the account type
             // Loan payment accounts may not come up well (mine didn't)
@@ -159,7 +154,7 @@ export class DashboardComponent implements OnInit {
                 const account_id = ach[index]["account_id"];
                 if (account_id === this.accountDetails[detailIndex]["account_id"]) {
                   this.accountDetails[detailIndex]["account"] = ach[index]["account"];
-                  this.accountDetails[detailIndex]["routing"] = ach[index]["routing"]
+                  this.accountDetails[detailIndex]["routing"] = ach[index]["routing"];
                 }
               }
             }

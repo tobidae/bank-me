@@ -30,8 +30,7 @@
                   <p class="current card-value">Account No: {{account['account']}}</p>
                   <p class="current card-value">Routing No: {{account['routing']}}</p>
                 </div>
-                <div class="col-3">
-                  <p class="mask card-value">x{{account.mask}}</p>
+                <div class="col-3" *ngIf="account.balances.limit">
                   <p class="limit card-value" *ngIf="account.balances.limit">Limit: {{account.balances.limit | currency}}</p>
                 </div>
               </div>
