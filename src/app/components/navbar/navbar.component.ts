@@ -2,7 +2,6 @@ import { SettingsComponent } from './../settings/settings.component';
 import { AuthService } from './../../services/auth/auth.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { BankingService } from '../../services/banking/banking.service';
-import { Router } from '@angular/router';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -29,6 +28,13 @@ export class NavbarComponent implements OnInit {
 
       }, (reason) => {
 
+      });
+  }
+
+  logout() {
+    this.authService.logout()
+      .then(() => {
+        return this.bankService.deleteAccess();
       });
   }
 

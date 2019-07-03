@@ -7,7 +7,8 @@ import * as moment from 'moment';
 import 'rxjs/add/operator/toPromise';
 declare var Plaid: any;
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { BankTransaction } from '../../shared/interfaces';
+import { BankTransaction, BankAccount, AccountBalance, AccountInfo } from '../../shared/interfaces';
+import { d } from "@angular/core/src/render3";
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,14 @@ export class BankingService {
   host: string;
   headers: Headers;
 
-  observableTransaction: BehaviorSubject<BankTransaction[]>;
-  txDetails: Array<BankTransaction>;
+  observableBankDetails: BehaviorSubject<{
+    accounts: BankAccount[],
+    transactions: BankTransaction[]
+  }>;
+  txDetails: {
+    accounts: BankAccount[],
+    transactions: BankTransaction[]
+  };
 
   constructor(public http: Http, public storageService: StorageService,
     public ngZone: NgZone, public authService: AuthService) {
@@ -31,7 +38,7 @@ export class BankingService {
     this.headers.append('Content-Type', 'application/json');
     this.headers.append('Access-Control-Allow-Origin', '*');
 
-    this.observableTransaction = new BehaviorSubject<BankTransaction[]>(this.txDetails);
+    this.observableBankDetails = new BehaviorSubject<any>(this.txDetails);
   }
 
   launchPlaidService() {
@@ -45,7 +52,7 @@ export class BankingService {
         apiVersion: 'v2',
         clientName: 'Bank Me',
         env: environment.plaidConfig.env,
-        product: ['auth', 'transactions'],
+        product: ['transactions'],
         key: environment.plaidConfig.publicKey,
         onSuccess: function (public_token) {
           return self.authService.userToken()
@@ -142,7 +149,7 @@ export class BankingService {
   }
 
   txEventChange() {
-    this.observableTransaction.next(this.txDetails);
+    this.observableBankDetails.next(this.txDetails);
   }
 
   getCategories() {
@@ -186,14 +193,46 @@ export class BankingService {
   }
 
   setPlaidToken(data) {
-    this.storageService.setInLocal('plaid_item_id', data.item_id);
-    return this.storageService.setInLocal('plaid_access_token', data.access_token);
+    // The item ID is saved so that the system can do an automatic cleaning to free up Plaid access
+    // The development limit for Plaid is 100 and it's very easy to hit that limit.
+    // This is fixed by storing the itemID and after a certain period of time (every week),
+    // The users that have not checked back in recently get removed from Plaid until they want access again
+    // Your access token, the key that is used to view transactions is never stored in the server,
+    // only locally on your machine.
+    this.storageService.setInServer(`bankData/${this.authService.userID}/itemID`, data.item_id)
+      .then(() => {
+        this.storageService.setInLocal('plaid_item_id', data.item_id);
+        return this.storageService.setInLocal('plaid_access_token', data.access_token);
+      });
   }
 
   deleteAccess() {
-    this.storageService.removeInLocal('plaid_item_id');
-    this.storageService.removeInLocal('plaid_access_token');
-    return Promise.resolve("done");
+    return new Promise((resolve, reject) => {
+      if (this.hasPlaidAccess()) {
+        return this.authService.userToken()
+          .then(token => {
+
+            if (token) {
+              this.headers.set('Authorization', `Bearer ${token}`);
+              this.http.get(this.host + '/api/logout', {
+                headers: this.headers
+              })
+                .toPromise()
+                .then(data => {
+                  this.storageService.removeInLocal('plaid_item_id');
+                  this.storageService.removeInLocal('plaid_access_token');
+                  return Promise.resolve("done");
+                })
+                .catch(error => {
+                  reject(error);
+                });
+            }
+          });
+
+      } else {
+        resolve(null);
+      }
+    });
   }
 
   private handleError(error: any) {

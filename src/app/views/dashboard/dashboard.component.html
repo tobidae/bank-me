@@ -27,6 +27,8 @@
                 <div class="col-9">
                   <h3 class="card-value">Avail: {{account.balances.available | currency}}</h3>
                   <p class="current card-value">Bal: {{account.balances.current | currency}}</p>
+                  <p class="current card-value">Account No: {{account['account']}}</p>
+                  <p class="current card-value">Routing No: {{account['routing']}}</p>
                 </div>
                 <div class="col-3">
                   <p class="mask card-value">x{{account.mask}}</p>

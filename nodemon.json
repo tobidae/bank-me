@@ -1,0 +1,13 @@
+{
+  "watch": [
+    "src/*",
+    "server/*"
+  ],
+  "ext": "ts js html",
+  "ignore": [
+    ".git",
+    "node_modules/**/node_modules",
+    "**/*.spec.ts"
+  ],
+  "exec": "ng build && node app.js"
+}

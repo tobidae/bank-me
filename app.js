@@ -16,7 +16,6 @@ if (process.env.NODE_ENV !== 'production') {
   credentials = JSON.parse(process.env.SERVICE_ACCOUNT);
 }
 
-
 // Initialize the firebase admin module
 fireAdmin.initializeApp({
   credential: fireAdmin.credential.cert(credentials),

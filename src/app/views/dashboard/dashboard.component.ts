@@ -56,21 +56,34 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.txSubscription = this.bankService.observableTransaction.subscribe((txs: BankTransaction[]) => {
+    this.txSubscription = this.bankService.observableBankDetails.subscribe((details: {
+      accounts: BankAccount[],
+      transactions: BankTransaction[]
+    }) => {
       this.allTransactionDetails = {};
       this.transactionDetails = {};
+      console.log(details);
 
-      for (const index in txs) {
-        const tx = txs[index];
-        tx.isTxSelected = false;
-        this.allTransactionDetails[tx.transaction_id] = tx;
-        this.transactionDetails[tx.transaction_id] = tx;
+      for (const type in details) {
+        if (type === "transactions") {
+          for (const index in details[type]) {
+            if (details[type].hasOwnProperty(index)) {
+              const tx = details[type][index];
+              tx.isTxSelected = false;
+              this.allTransactionDetails[tx.transaction_id] = tx;
+              this.transactionDetails[tx.transaction_id] = tx;
+            }
+          }
+        }
+        if (type === "accounts") {
+          this.accountDetails = details[type];
+        }
       }
 
       // Check all tx by default when they are added
       this.selectAllTx = true;
       this.checkAllTx();
-      if (txs && this.rawCategories) {
+      if (details && this.rawCategories) {
         this.populateCategoryFilter();
       }
     });
@@ -131,6 +144,7 @@ export class DashboardComponent implements OnInit {
     return this.bankService.getBankAccounts()
       .then(data => {
         if (data) {
+          console.log(data);
           if (data['error']) {
             // Lazy error handling, errors here usually have something to do with the account type
             // Loan payment accounts may not come up well (mine didn't)
@@ -138,6 +152,18 @@ export class DashboardComponent implements OnInit {
             return;
           }
           this.accountDetails = data['accounts'];
+          for (const detailIndex in this.accountDetails) {
+            const ach = data["numbers"]["ach"];
+            for (const index in ach) {
+              if (ach.hasOwnProperty(index)) {
+                const account_id = ach[index]["account_id"];
+                if (account_id === this.accountDetails[detailIndex]["account_id"]) {
+                  this.accountDetails[detailIndex]["account"] = ach[index]["account"];
+                  this.accountDetails[detailIndex]["routing"] = ach[index]["routing"]
+                }
+              }
+            }
+          }
         }
       });
   }

@@ -33,7 +33,7 @@ module.exports = {
     client.exchangePublicToken(PUBLIC_TOKEN, function (error, tokenResponse) {
       if (error != null) {
         var msg = 'Could not exchange public_token!';
-        console.log(msg + '\n' + new Date());
+        console.log(msg, new Date());
         return response.json({
           error: error
         });
@@ -75,5 +75,14 @@ module.exports = {
       .catch(error => {
         response.status(400).json(error);
       });
+  },
+  deleteAccess: (access_token) => {
+    return client.removeItem(access_token)
+      .then(() => {
+        return client.invalidateAccessToken(access_token);
+      })
+      .catch(err => {
+        console.error("Delete Access Err", err);
+      });
   }
-}
+};

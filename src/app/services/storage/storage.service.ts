@@ -1,4 +1,4 @@
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable, Inject } from '@angular/core';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 
@@ -12,7 +12,7 @@ export class StorageService {
   }
 
   setInLocal(key, val): void {
-    console.log('recieved = key:' + key + ' value:' + val);
+    // console.log('received = key:' + key + ' value:' + val);
     this.storage.set(key, val);
   }
 
@@ -22,5 +22,9 @@ export class StorageService {
 
   removeInLocal(key): any {
     return this.storage.remove(key);
+  }
+
+  setInServer(key, val) {
+    return this.db.database.ref(key).update(val);
   }
 }

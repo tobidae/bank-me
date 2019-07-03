@@ -35,6 +35,11 @@ router.get('/categories', (request, response) => {
   bank.getCategories(request, response);
 });
 
+router.get('/logout', (request, response) => {
+  const access_token = request.body.access_token;
+  bank.deleteAccess(access_token);
+});
+
 router.post('/transactions', (request, response) => {
   response.setHeader('Content-Type', 'application/json');
 
