@@ -32,6 +32,8 @@ import { TransactionCardComponent } from './components/transaction-card/transact
 import { LoaderComponent } from './components/loader/loader.component';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { ObjKeysPipe } from './pipes/obj-keys/obj-keys.pipe';
+import { FirstTimeLinkComponent } from './components/first-time-link/first-time-link.component';
+import { AddPlaidInfoComponent } from './components/add-plaid-info/add-plaid-info.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { ObjKeysPipe } from './pipes/obj-keys/obj-keys.pipe';
     TransactionComponent,
     TransactionCardComponent,
     LoaderComponent,
-    ObjKeysPipe
+    ObjKeysPipe,
+    FirstTimeLinkComponent,
+    AddPlaidInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +68,8 @@ import { ObjKeysPipe } from './pipes/obj-keys/obj-keys.pipe';
   ],
   entryComponents: [
     SettingsComponent,
-    TransactionComponent
+    TransactionComponent,
+    AddPlaidInfoComponent
   ],
   providers: [
     BankingService,

@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit {
         this.populateCategoryFilter();
       }
     });
-    this.getBankDetails();
+    this.getBankDetails(true);
     this.getCategories();
     this.getTransactions();
   }
@@ -129,14 +129,8 @@ export class DashboardComponent implements OnInit {
     this.checkAllTx();
   }
 
-  linkBankAccount() {
-    return this.bankService.launchPlaidService()
-      .then(() => {
-        this.getBankDetails();
-      });
-  }
-
-  getBankDetails() {
+  getBankDetails(value) {
+    if (!value) return false;
     return this.bankService.getBankAccounts()
       .then(data => {
         if (data) {

@@ -3,7 +3,7 @@
     "src/*",
     "server/*"
   ],
-  "ext": "ts js html",
+  "ext": "ts js html css",
   "ignore": [
     ".git",
     "node_modules/**/node_modules",

@@ -8,7 +8,6 @@ import 'rxjs/add/operator/toPromise';
 declare var Plaid: any;
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BankTransaction, BankAccount, AccountBalance, AccountInfo } from '../../shared/interfaces';
-import { d } from "@angular/core/src/render3";
 
 @Injectable({
   providedIn: 'root'

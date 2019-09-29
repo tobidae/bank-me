@@ -19,3 +19,9 @@ body {
 app-loader {
   margin: 0 auto;
 }
+
+@media (min-width: 992px) {
+  .add-plaid-info-modal .modal-dialog {
+    max-width: 1000px;
+  }
+}

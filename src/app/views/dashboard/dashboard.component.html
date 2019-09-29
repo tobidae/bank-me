@@ -3,15 +3,7 @@
   <div *ngIf="!errorMessage">
 
     <div class="setup-ui" *ngIf="!hasPlaidAccess">
-      <div class="card mx-auto">
-        <div class="card-body">
-          <div class="row justify-content-center">
-            <div class="col-md-6 col-md-offset-3">
-              <button class="btn btn-success btn-block" (click)="linkBankAccount()">Link Bank Account</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-first-time-link (getBankDetailsEmitter)="getBankDetails($event)"></app-first-time-link>
     </div>
 
     <div class="data-ui" *ngIf="hasPlaidAccess && accountDetails">
@@ -27,8 +19,8 @@
                 <div class="col-9">
                   <h3 class="card-value">Avail: {{account.balances.available | currency}}</h3>
                   <p class="current card-value">Bal: {{account.balances.current | currency}}</p>
-                  <p class="current card-value">Account No: {{account['account']}}</p>
-                  <p class="current card-value">Routing No: {{account['routing']}}</p>
+                  <p class="current card-value" *ngIf="account['account']">Account No: {{account['account']}}</p>
+                  <p class="current card-value" *ngIf="account['routing']">Routing No: {{account['routing']}}</p>
                 </div>
                 <div class="col-3" *ngIf="account.balances.limit">
                   <p class="limit card-value" *ngIf="account.balances.limit">Limit: {{account.balances.limit | currency}}</p>

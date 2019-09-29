@@ -1,0 +1,15 @@
+<div class="card">
+  <div class="card-header">
+    <button class="btn btn-dark float-left" *ngIf="hasPrevious">Previous</button>
+    <button class="btn btn-dark float-right" *ngIf="hasNext">Next</button>
+  </div>
+  <div class="card-body" *ngIf="showPlaidInstructions">
+    <p>1.  Go to <a href="https://plaid.com" target="_blank">Plaid</a> and create an account</p>
+    <p>2.  Click on "Build in Development"</p>
+    <p>3.  The API Keys to view transactions, authentication and balance should be provided in the dev page</p>
+    <p>4.  If you have more than 5 separate bank accounts, you can fill out a 'use form' to increase the credentials limit
+          to 100.</p>
+    <p>5.  Go to the next page to add your API Keys and Secret, only you have access to this keys. Checkout the project source code on
+      <a href="https://github.com/tobidae/bank-me" target="_blank">Github</a></p>
+  </div>
+</div>
