@@ -16,11 +16,7 @@ export class AuthService {
     this.user = _firebaseAuth.authState;
 
     this.user.subscribe((user) => {
-      if (user) {
-        this.userDetails = user;
-      } else {
-        this.userDetails = null;
-      }
+      this.userDetails = user;
     });
   }
 
@@ -30,23 +26,23 @@ export class AuthService {
     );
   }
 
-  signInWithPassword(value) {
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().signInWithEmailAndPassword(value.email, value.password)
-        .then(res => {
-          resolve(res);
-        }, err => reject(err));
-    });
-  }
+  // signInWithPassword(value) {
+  //   return new Promise<any>((resolve, reject) => {
+  //     firebase.auth().signInWithEmailAndPassword(value.email, value.password)
+  //       .then(res => {
+  //         resolve(res);
+  //       }, err => reject(err));
+  //   });
+  // }
 
-  doRegister(value) {
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
-        .then(res => {
-          resolve(res);
-        }, err => reject(err));
-    });
-  }
+  // doRegister(value) {
+  //   return new Promise<any>((resolve, reject) => {
+  //     firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
+  //       .then(res => {
+  //         resolve(res);
+  //       }, err => reject(err));
+  //   });
+  // }
 
   userToken() {
     return this._firebaseAuth.auth.currentUser.getIdToken(true)
@@ -58,12 +54,16 @@ export class AuthService {
       });
   }
 
-  isLoggedIn() {
-    if (this.userDetails == null) {
-      return false;
-    } else {
-      return true;
-    }
+  isLoggedIn(): boolean {
+    return Boolean(this.userDetails);
+  }
+
+  get currentUser() {
+    return new Promise((resolve) => {
+      this.user.subscribe((user) => {
+        resolve(user);
+      });
+    });
   }
 
   get displayName() {

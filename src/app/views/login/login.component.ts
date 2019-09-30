@@ -46,18 +46,18 @@ export class LoginComponent implements OnInit {
       .catch((err) => console.log(err));
   }
 
-  signInWithPassword(value) {
-    this.authService.signInWithPassword(value)
-      .then(res => {
-        this.saveUserDetails(res);
-        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
-        });
-      }, err => {
-        console.log(err);
-        this.errorMessage = err.message;
-      });
-  }
+  // signInWithPassword(value) {
+  //   this.authService.signInWithPassword(value)
+  //     .then(res => {
+  //       this.saveUserDetails(res);
+  //       this.ngZone.run(() => {
+  //         this.router.navigate(['dashboard']);
+  //       });
+  //     }, err => {
+  //       console.log(err);
+  //       this.errorMessage = err.message;
+  //     });
+  // }
 
   saveUserDetails(data) {
     this.storageStorage.setInLocal('userID', data.user.uid);

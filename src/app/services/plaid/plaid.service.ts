@@ -25,7 +25,8 @@ export class PlaidService {
     this.headers.append('Access-Control-Allow-Origin', '*');
   }
 
-  setPlaidKeys() {
-
+  setPlaidKeys(data) {
+    const userID = this.authService.userID;
+    return this.db.database.ref(`settings/${userID}/plaidAccess`).set(data);
   }
 }

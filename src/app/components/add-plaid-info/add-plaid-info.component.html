@@ -1,15 +1,44 @@
 <div class="card">
   <div class="card-header">
-    <button class="btn btn-dark float-left" *ngIf="hasPrevious">Previous</button>
-    <button class="btn btn-dark float-right" *ngIf="hasNext">Next</button>
+    <button class="btn btn-dark float-left" *ngIf="hasPrevious" (click)="switchPage(currentPage-1)">Previous</button>
+    <h3 class="mb-0 text-center">{{title}}</h3>
+    <button class="btn btn-dark float-right" *ngIf="hasNext" (click)="switchPage(currentPage+1)">Next</button>
   </div>
-  <div class="card-body" *ngIf="showPlaidInstructions">
+  <div class="card-body add-info-body" *ngIf="showPlaidInstructions">
     <p>1.  Go to <a href="https://plaid.com" target="_blank">Plaid</a> and create an account</p>
     <p>2.  Click on "Build in Development"</p>
     <p>3.  The API Keys to view transactions, authentication and balance should be provided in the dev page</p>
     <p>4.  If you have more than 5 separate bank accounts, you can fill out a 'use form' to increase the credentials limit
           to 100.</p>
     <p>5.  Go to the next page to add your API Keys and Secret, only you have access to this keys. Checkout the project source code on
-      <a href="https://github.com/tobidae/bank-me" target="_blank">Github</a></p>
+      <a href="https://github.com/tobidae/bank-me" target="_blank">Github</a> to see how your keys are secured via encryption</p>
+  </div>
+  <div class="card-body add-info-body" *ngIf="showPlaidFields">
+    <form class="form" autocomplete="off" [formGroup]="plaidForm" (ngSubmit)="submitPlaidForm()">
+      <div class="form-group row">
+        <label class="col-lg-3 col-form-label form-control-label">Client ID</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="text" placeholder="8dshs823932..." formControlName="clientID">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-lg-3 col-form-label form-control-label">Public Key</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="text" placeholder="a22dd4dsd43..." formControlName="publicKey">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-lg-3 col-form-label form-control-label">Secret Key</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="text" placeholder="84dsps8hfg4..." formControlName="secretKey">
+        </div>
+      </div>
+      <div class="form-group row mt-5">
+        <div class="col-12 text-center">
+          <button type="reset" class="btn btn-secondary mr-5" (click)="cancelForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!plaidForm.valid">Save Plaid Info</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
