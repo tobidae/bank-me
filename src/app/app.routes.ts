@@ -6,6 +6,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { ModuleWithProviders } from '@angular/core';
+import { SettingsComponent } from "./views/settings/settings.component";
 
 const appRoutes: Routes = [
   {
@@ -25,6 +26,11 @@ const appRoutes: Routes = [
     path: 'dashboard',
     canActivate: [AuthGuard],
     component: DashboardComponent
+  },
+  {
+    path: 'settings',
+    canActivate: [AuthGuard],
+    component: SettingsComponent
   }
 ];
 

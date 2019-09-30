@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BankingService } from "../../services/banking/banking.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AddPlaidInfoComponent } from "../add-plaid-info/add-plaid-info.component";
 
 @Component({
@@ -11,7 +11,8 @@ import { AddPlaidInfoComponent } from "../add-plaid-info/add-plaid-info.componen
 export class FirstTimeLinkComponent implements OnInit {
   @Output() getBankDetailsEmitter: EventEmitter<any> = new EventEmitter();
 
-  constructor(private bankService: BankingService, private modalService: NgbModal) { }
+  constructor(private bankService: BankingService, private modalService: NgbModal) {
+  }
 
   ngOnInit() {
   }
@@ -28,9 +29,6 @@ export class FirstTimeLinkComponent implements OnInit {
       size: 'lg',
       windowClass: 'add-plaid-info-modal'
     });
-    // addPlaidInfoRef.componentInstance.id = id;
-    // addPlaidInfoRef.componentInstance.dealerID = this.dealerID;
-    // addPlaidInfoRef.componentInstance.selectedTemplate = this.selectedTemplate;
 
     addPlaidInfoRef.result
       .then(() => {
@@ -38,5 +36,4 @@ export class FirstTimeLinkComponent implements OnInit {
       .catch(err => {
       });
   }
-
 }

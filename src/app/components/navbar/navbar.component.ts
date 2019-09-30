@@ -1,9 +1,9 @@
-import { SettingsComponent } from './../settings/settings.component';
 import { AuthService } from './../../services/auth/auth.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { BankingService } from '../../services/banking/banking.service';
 
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
   displayName: string;
 
   constructor(public authService: AuthService, public bankService: BankingService,
-    private modalService: NgbModal) {
+              private modalService: NgbModal, private router: Router) {
     this.displayName = this.authService.displayName;
   }
 
@@ -23,12 +23,7 @@ export class NavbarComponent implements OnInit {
   }
 
   launchSettings() {
-    this.modalService.open(SettingsComponent).result
-      .then((result) => {
-
-      }, (reason) => {
-
-      });
+    this.router.navigate(['/settings']);
   }
 
   logout() {

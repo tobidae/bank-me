@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { PlaidService } from "../../services/plaid/plaid.service";
+import { ToastService } from "../../services/util/toast.service";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-add-plaid-info',
@@ -18,7 +21,8 @@ export class AddPlaidInfoComponent implements OnInit {
 
   plaidForm: FormGroup;
 
-  constructor(private router: Router, private fb: FormBuilder) {
+  constructor(private router: Router, private fb: FormBuilder, private plaidService: PlaidService, private toastService: ToastService,
+              private activeModal: NgbActiveModal) {
     this.maxPage = 2;
   }
 
@@ -56,6 +60,14 @@ export class AddPlaidInfoComponent implements OnInit {
 
   submitPlaidForm() {
     const data = this.plaidForm.value;
+    this.plaidService.setPlaidKeys(data)
+      .then(() => {
+        this.activeModal.dismiss();
+        this.toastService.success("Added Plaid keys to database, you can now view your bank accounts");
+      })
+      .catch(err => {
+        this.toastService.error(err, "There was an error!");
+      });
   }
 
   cancelForm() {

@@ -1,6 +1,7 @@
 import { StorageService } from './services/storage/storage.service';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -25,7 +26,7 @@ import { UserService } from './services/user/user.service';
 import { GettingStartedComponent } from './components/getting-started/getting-started.component';
 import { StorageServiceModule} from 'angular-webstorage-service';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { SettingsComponent } from './components/settings/settings.component';
+import { SettingsComponent } from './views/settings/settings.component';
 import { MomentModule } from 'ngx-moment';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
@@ -34,6 +35,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { ObjKeysPipe } from './pipes/obj-keys/obj-keys.pipe';
 import { FirstTimeLinkComponent } from './components/first-time-link/first-time-link.component';
 import { AddPlaidInfoComponent } from './components/add-plaid-info/add-plaid-info.component';
+import { ToastrModule } from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -53,6 +55,7 @@ import { AddPlaidInfoComponent } from './components/add-plaid-info/add-plaid-inf
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     NgbModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
@@ -64,7 +67,10 @@ import { AddPlaidInfoComponent } from './components/add-plaid-info/add-plaid-inf
     routing,
     StorageServiceModule,
     MomentModule,
-    MultiselectDropdownModule
+    MultiselectDropdownModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right',
+    })
   ],
   entryComponents: [
     SettingsComponent,
