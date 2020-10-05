@@ -1,0 +1,8 @@
+
+=== CREATE NGXS STORE
+firebase functions:log --only <function> -n 1000
+
+=== GET Indexes from Firestore
+firebase firestore:indexes > firestore.indexes.json
+firebase functions:config:get > .runtimeconfig.json
+firebase deploy --only firestore:rules

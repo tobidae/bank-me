@@ -6,12 +6,15 @@
     "ng": "ng",
     "start": "ng build && node app.js",
     "nodemon": "nodemon",
-    "build": "ng build",
-    "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
     "run": "node app.js",
-    "postinstall": "ng build --prod && npm install --prefix server"
+    "postinstall": "ng build --prod && npm install --prefix server",
+    "local:start": "ng serve --port 4200 --configuration=local",
+    "dev:start": "ng serve --port 4200",
+    "build": "ng build --aot --optimization --build-optimizer",
+    "build:ci": "if test \"$BRANCH_NAME\" = \"master\"; then npm run build -- --prod; else npm run build -- --prod; fi",
+    "deploy": "firebase deploy --except functions --token \"$FIREBASE_TOKEN\" --non-interactive",
+    "deploy:ci": "if test \"$BRANCH_NAME\" = \"master\"; then npm run deploy; fi"
   },
   "private": true,
   "dependencies": {
