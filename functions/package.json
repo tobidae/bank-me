@@ -20,6 +20,7 @@
   },
   "main": "build/index.js",
   "dependencies": {
+    "@google-cloud/logging-winston": "^3.0.6",
     "@types/json2csv": "4.5.1",
     "@types/request": "^2.48.5",
     "@types/request-promise": "^4.1.46",
