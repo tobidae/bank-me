@@ -56,7 +56,7 @@ export class BankingService {
         onSuccess: function (public_token) {
           return self.authService.userToken()
             .then(token => {
-
+              console.log(token);
               if (token) {
                 self.headers.set('Authorization', `Bearer ${token}`);
                 return self.http.post(self.host + '/api/get_access_token', { public_token: public_token }, {
@@ -87,6 +87,7 @@ export class BankingService {
 
         return this.authService.userToken()
           .then(token => {
+            console.log(token);
 
             if (token) {
               this.headers.set('Authorization', `Bearer ${token}`);
@@ -118,6 +119,7 @@ export class BankingService {
       if (this.hasPlaidAccess()) {
         return this.authService.userToken()
           .then(token => {
+            console.log(token);
 
             if (token) {
               this.headers.set('Authorization', `Bearer ${token}`);
@@ -156,6 +158,7 @@ export class BankingService {
       if (this.hasPlaidAccess()) {
         return this.authService.userToken()
           .then(token => {
+            console.log(token);
 
             if (token) {
               this.headers.set('Authorization', `Bearer ${token}`);

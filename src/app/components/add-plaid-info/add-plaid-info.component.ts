@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { PlaidService } from "../../services/plaid/plaid.service";
 import { ToastService } from "../../services/util/toast.service";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { PlaidInfo } from "../../shared/interfaces";
 
 @Component({
   selector: 'app-add-plaid-info',
@@ -18,6 +19,7 @@ export class AddPlaidInfoComponent implements OnInit {
   title: string;
   currentPage: number;
   maxPage: number;
+  plaidInfo: PlaidInfo;
 
   plaidForm: FormGroup;
 
@@ -40,7 +42,7 @@ export class AddPlaidInfoComponent implements OnInit {
     });
   }
 
-  switchPage(curPage) {
+  async switchPage(curPage) {
     this.currentPage = curPage;
 
     if (this.currentPage === 1) {
@@ -55,6 +57,13 @@ export class AddPlaidInfoComponent implements OnInit {
       this.hasNext = false;
       this.hasPrevious = true;
       this.title = "Add Plaid Keys";
+      this.plaidInfo = await this.plaidService.getPlaidKeys();
+
+      if (this.plaidInfo) {
+        this.plaidForm.controls['clientID'].setValue(this.plaidInfo.clientID);
+        this.plaidForm.controls['publicKey'].setValue(this.plaidInfo.publicKey);
+        this.plaidForm.controls['secretKey'].setValue(this.plaidInfo.secretKey);
+      }
     }
   }
 
@@ -71,6 +80,7 @@ export class AddPlaidInfoComponent implements OnInit {
   }
 
   cancelForm() {
+    this.activeModal.dismiss();
     this.router.navigate(['/dashboard']);
   }
 

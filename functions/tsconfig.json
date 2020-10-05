@@ -2,14 +2,19 @@
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "outDir": "lib",
+    // Turn this back on
+    "noUnusedLocals": false,
+    "outDir": "build",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "resolveJsonModule": true,
+    "strictNullChecks": false,
+    "types": ["facebook-js-sdk"]
   },
   "compileOnSave": true,
   "include": [
-    "src"
+    "src",
+    "src/config/*.json"
   ]
 }

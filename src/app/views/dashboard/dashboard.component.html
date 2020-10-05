@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 <div class="container-fluid">
-  <div *ngIf="!errorMessage">
+  <div *ngIf="!errorMessage && canShowUI">
 
     <div class="setup-ui" *ngIf="!hasPlaidAccess">
       <app-first-time-link (getBankDetailsEmitter)="getBankDetails($event)"></app-first-time-link>

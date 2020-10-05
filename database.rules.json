@@ -2,6 +2,14 @@
   "rules": {
     "settings": {
       "$uid": {
+        "plaidAccess": {
+          ".read": false,
+          ".write": "$uid === auth.uid",
+          "hasPlaidKey": {
+            ".read": "$uid === auth.uid",
+            ".write": "$uid === auth.uid"
+          }
+        },
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
       }

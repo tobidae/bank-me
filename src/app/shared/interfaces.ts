@@ -34,3 +34,9 @@ export class BankTransaction {
 export enum PlaidErrors {
   PRODUCT_NOT_READY = 'PRODUCT_NOT_READY'
 }
+
+export class PlaidInfo {
+  clientID: string;
+  publicKey: string;
+  secretKey: string;
+}

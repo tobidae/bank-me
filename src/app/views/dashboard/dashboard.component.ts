@@ -1,6 +1,6 @@
 import { TransactionComponent } from './../../components/transaction/transaction.component';
 import { BankingService } from './../../services/banking/banking.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { StorageService } from '../../services/storage/storage.service';
 import * as constants from '../../shared/constants';
@@ -8,6 +8,7 @@ import { BankAccount, AccountBalance, AccountInfo, BankTransaction } from '../..
 import { NgbDateStruct, NgbCalendar, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
 import { Subscription } from 'rxjs/Subscription';
+import { PlaidService } from "../../services/plaid/plaid.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  hasPlaidAccess;
   accountDetails: BankAccount[];
   allTransactionDetails = {};
   transactionDetails = {};
@@ -44,9 +46,10 @@ export class DashboardComponent implements OnInit {
     buttonClasses: "btn btn-info"
   };
   rawCategories: any[];
+  canShowUI: boolean;
 
-  constructor(public authService: AuthService, public storageService: StorageService,
-              public bankService: BankingService, public calendar: NgbCalendar,
+  constructor(public authService: AuthService, public storageService: StorageService, private plaidService: PlaidService,
+              public bankService: BankingService, public calendar: NgbCalendar, public ngZone: NgZone,
               public modalService: NgbModal) {
 
     this.minDate = calendar.getPrev(calendar.getToday(), 'm', 24);
@@ -56,6 +59,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkPlaidAccess();
     this.txSubscription = this.bankService.observableBankDetails.subscribe((details: {
       accounts: BankAccount[],
       transactions: BankTransaction[]
@@ -141,6 +145,7 @@ export class DashboardComponent implements OnInit {
             return;
           }
           this.accountDetails = data['accounts'];
+          console.log(this.accountDetails);
           for (const detailIndex in this.accountDetails) {
             const ach = data["numbers"]["ach"];
             for (const index in ach) {
@@ -287,7 +292,9 @@ export class DashboardComponent implements OnInit {
     this.selectAllTxText = `${counter} Tx selected`;
   }
 
-  get hasPlaidAccess() {
-    return this.bankService.hasPlaidAccess();
+  async checkPlaidAccess() {
+    this.hasPlaidAccess = await this.plaidService.hasPlaidAccess();
+    this.canShowUI = true;
+    return;
   }
 }

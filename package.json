@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng build && node app.js",
+    "nodemon": "nodemon",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

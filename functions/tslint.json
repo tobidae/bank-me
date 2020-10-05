@@ -13,7 +13,7 @@
     "no-namespace": true,
 
     // Do not allow parameters to be reassigned. To avoid bugs, developers should instead assign new values to new vars.
-    "no-parameter-reassignment": true,
+    "no-parameter-reassignment": false,
 
     // Force the use of ES6-style imports instead of /// <reference path=> imports.
     "no-reference": true,
@@ -88,7 +88,7 @@
     "no-var-keyword": {"severity": "warning"},
 
     // Prefer === and !== over == and !=. The latter operators support overloads that are often accidental.
-    "triple-equals": {"severity": "warning"},
+    "triple-equals": {"severity": "none"},
 
     // Warn when using deprecated APIs.
     "deprecation": {"severity": "warning"},
@@ -111,5 +111,5 @@
     "trailing-comma": {"severity": "warning"}
   },
 
-  "defaultSeverity": "error"
+  "defaultSeverity": "warning"
 }
